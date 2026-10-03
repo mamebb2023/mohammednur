@@ -1,20 +1,19 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Kulim+Park:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400;1,600;1,700&display=swap');
 @import "tailwindcss";
 
-@theme {
-  --font-plex-serif: "IBM Plex Serif", serif;
-}
+@font-face {
+  font-family: 'Gendy Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Gendy Regular'), url('./assets/fonts/Gendy.woff') format('woff');
+  }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@theme {
+  --font-kulim-park: "Kulim Park";
+  --font-gendy: "Gendy Regular";
+  --color-primary: #03fc7f;
 }
 
 body {
-  font-family: var(--font-plex-serif);
-}
-
-#root {
-  min-height: 100vh;
+  font-family: var(--font-kulim-park);
 }
