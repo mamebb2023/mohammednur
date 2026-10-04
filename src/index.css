@@ -1,12 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Kulim+Park:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400;1,600;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Kulim+Park:ital,wght@0,200;0,300;0,400;0,600;0,700;1,200;1,300;1,400;1,600;1,700&display=swap");
 @import "tailwindcss";
 
 @font-face {
-  font-family: 'Gendy Regular';
+  font-family: "Gendy Regular";
   font-style: normal;
   font-weight: normal;
-  src: local('Gendy Regular'), url('./assets/fonts/Gendy.woff') format('woff');
-  }
+  src:
+    local("Gendy Regular"),
+    url("./assets/fonts/Gendy.woff") format("woff");
+}
 
 @theme {
   --font-kulim-park: "Kulim Park";
@@ -14,6 +16,52 @@
   --color-primary: #03fc7f;
 }
 
-body {
-  font-family: var(--font-kulim-park);
+@layer base {
+  * {
+    @apply scrollbar-none md:scrollbar-thin;
+  }
+  * {
+    scrollbar-color: var(--color-primary) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: #00e66d;
+    background-clip: content-box;
+  }
+  *::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  body {
+    font-family: var(--font-kulim-park);
+  }
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+}
+
+@keyframes lotus-sway {
+  0%,
+  100% {
+    transform: rotate(calc(var(--sway) * -1));
+  }
+  50% {
+    transform: rotate(var(--sway));
+  }
+}
+
+.lotus-sway {
+  transform-origin: center bottom;
+  animation: lotus-sway 4s ease-in-out infinite;
 }

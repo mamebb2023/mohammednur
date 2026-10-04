@@ -1,15 +1,14 @@
 import { useLocation, useOutlet } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import Header from "./Header";
+import Lotus from "../Lotus";
+import { easeOutExpo } from "@/constants";
 
-const easeOutExpo = [0.22, 1, 0.36, 1] as const;
 const easeIn = [0.4, 0, 1, 1] as const;
 
 export default function LandingLayout() {
   const location = useLocation();
-  // Capture the outlet at render time so the exiting page keeps its own content
   const outlet = useOutlet();
-  // const reduceMotion = useReducedMotion();
 
   const pageVariants = {
     initial: { opacity: 0 },
@@ -24,7 +23,10 @@ export default function LandingLayout() {
   };
 
   return (
-    <main className="min-h-screen overflow-x-hidden">
+    <main className="relative overflow-x-hidden">
+      <div className="-z-10 fixed size-full top-1/2 left-5/6 md:left-1/2 lg:left-1/3">
+        <Lotus />
+      </div>
       <Header />
       <AnimatePresence
         mode="wait"
@@ -33,10 +35,9 @@ export default function LandingLayout() {
         <motion.div
           key={location.pathname}
           variants={pageVariants}
-          initial="initial"
           animate="animate"
           exit="exit"
-          className="mx-auto w-full p-3 md:p-4 lg:p-6"
+          className="z-20"
         >
           {outlet}
         </motion.div>

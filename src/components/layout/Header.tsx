@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import {
+  activeSpring,
+  easeOutExpo,
+  hoverSpring,
+  rollTransition,
+} from "@/constants";
+import Lotus from "../Lotus";
 
 const tabs = [
   { label: "Home", path: "/" },
@@ -8,22 +15,6 @@ const tabs = [
   { label: "Projects", path: "/projects" },
   { label: "Contact", path: "/contact" },
 ];
-
-const activeSpring = {
-  type: "spring" as const,
-  stiffness: 300,
-  damping: 24,
-  bounce: 0,
-};
-const hoverSpring = {
-  type: "spring" as const,
-  stiffness: 450,
-  damping: 32,
-  bounce: 0,
-};
-
-const easeOutExpo = [0.22, 1, 0.36, 1] as const;
-const rollTransition = { duration: 0.5, ease: easeOutExpo };
 
 // Header: only width and opacity. Width opens from the right edge (the header is anchored right).
 const navVariants = {
@@ -71,7 +62,11 @@ export default function Header() {
     path === "/" ? pathname === "/" : pathname.startsWith(path);
 
   return (
-    <header className="fixed top-4 right-4 z-50">
+    <header className="fixed top-4 inset-x-4 flex justify-between items-center z-50">
+      <div className="flex-center w-16">
+        <Lotus size="h-8 w-5" />
+      </div>
+
       <motion.nav
         variants={navVariants}
         initial="hidden"
