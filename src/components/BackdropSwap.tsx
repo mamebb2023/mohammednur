@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Silk, ColorBends, Beams } from "@/lib/lazy";
+import { Silk, ColorBends, Beams, Iridescence } from "@/lib/lazy";
 
 const INTERVAL_MS = 6000;
 const FADE_S = 1.4;
@@ -9,6 +9,7 @@ const FADE_S = 1.4;
 const LazySilk = Silk.Component;
 const LazyColorBends = ColorBends.Component;
 const LazyBeams = Beams.Component;
+const LazyIridescence = Iridescence.Component;
 
 const layers = [
   {
@@ -20,6 +21,17 @@ const layers = [
         color="#7cff67"
         noiseIntensity={2}
         rotation={0}
+      />
+    ),
+  },
+  {
+    key: "iridescence",
+    node: (
+      <LazyIridescence
+        color={[0.7607843137254902, 0.9254901960784314, 1]}
+        mouseReact
+        amplitude={0.1}
+        speed={1}
       />
     ),
   },

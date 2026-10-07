@@ -42,7 +42,7 @@ export default function About() {
               </motion.div>
             ),
           },
-          "and building robust back-end systems.",
+          "and building robust back-end systems",
           {
             pill: true,
             className: "border-3 border-primary",

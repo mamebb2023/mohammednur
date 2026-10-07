@@ -8,6 +8,9 @@ function defineLazy<P extends object>(
 }
 
 export const Silk = defineLazy(() => import("@/components/anim/Silk"));
+export const Iridescence = defineLazy(
+  () => import("@/components/anim/Iridescence"),
+);
 export const ColorBends = defineLazy(
   () => import("@/components/anim/ColorBlends"),
 );
@@ -16,7 +19,7 @@ export const Beams = defineLazy(() => import("@/components/anim/Beams"));
 export const LogoMarquee = defineLazy(() => import("@/components/Marquee"));
 
 // Everything the loader should wait for. Add new entries here and nowhere else.
-const preloadable = [Silk, ColorBends, Beams, LogoMarquee];
+const preloadable = [Silk, Iridescence, ColorBends, Beams, LogoMarquee];
 
 // One task per component, so each one nudges the percentage. Never rejects.
 export const componentPreloads = () =>

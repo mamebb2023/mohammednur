@@ -3,26 +3,28 @@ import React from "react";
 import type { IconType } from "react-icons";
 import {
   SiReact,
-  SiAstro,
   SiTailwindcss,
   SiVuedotjs,
   SiNextdotjs,
-  SiRemix,
   SiJavascript,
   SiTypescript,
-  SiSvelte,
+  SiMysql,
+  SiMongodb,
+  SiPython,
+  SiPrisma,
 } from "react-icons/si";
 
 const logos1: { id: number; name: string; icon: IconType }[] = [
   { id: 1, name: "React", icon: SiReact },
-  { id: 8, name: "TypeScript", icon: SiTypescript },
-  { id: 2, name: "Astro", icon: SiAstro },
+  { id: 2, name: "TypeScript", icon: SiTypescript },
   { id: 3, name: "Tailwind CSS", icon: SiTailwindcss },
   { id: 4, name: "Vue", icon: SiVuedotjs },
-  { id: 7, name: "JavaScript", icon: SiJavascript },
-  { id: 5, name: "Next.js", icon: SiNextdotjs },
-  { id: 6, name: "Remix", icon: SiRemix },
-  { id: 9, name: "Svelte", icon: SiSvelte },
+  { id: 5, name: "JavaScript", icon: SiJavascript },
+  { id: 6, name: "Next.js", icon: SiNextdotjs },
+  { id: 7, name: "Python", icon: SiPython },
+  { id: 8, name: "Prisma", icon: SiPrisma },
+  { id: 9, name: "MySQL", icon: SiMysql },
+  { id: 10, name: "MongoDB", icon: SiMongodb },
 ];
 
 const SPEED = "20s";
