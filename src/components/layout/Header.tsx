@@ -6,25 +6,19 @@ import {
   easeOutExpo,
   hoverSpring,
   rollTransition,
+  routes,
 } from "@/constants";
 import Lotus from "../Lotus";
 
-const tabs = [
-  { label: "Home", path: "/" },
-  { label: "About", path: "/about" },
-  { label: "Projects", path: "/projects" },
-  { label: "Contact", path: "/contact" },
-];
+const tabs = routes;
 
 // Header: only width and opacity. Width opens from the right edge (the header is anchored right).
 const navVariants = {
-  hidden: { width: 0, opacity: 0 },
+  hidden: { width: 0 },
   visible: {
     width: "auto",
-    opacity: 1,
     transition: {
       width: { duration: 0.8, ease: easeOutExpo },
-      opacity: { duration: 0.4, ease: "easeOut" as const },
     },
   },
 };
@@ -62,7 +56,7 @@ export default function Header() {
     path === "/" ? pathname === "/" : pathname.startsWith(path);
 
   return (
-    <header className="fixed top-4 inset-x-4 flex justify-between items-center z-50">
+    <header className="flex justify-between items-center z-50">
       <div className="flex-center w-16">
         <Lotus size="h-8 w-5" />
       </div>

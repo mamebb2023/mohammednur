@@ -14,7 +14,7 @@ import {
 import type { IconType } from "react-icons";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { easeOutExpo } from "@/constants";
-import RevealText from "../ui/RevealText";
+import HorizontalRow, { Slide } from "@/components/layout/HorizontalRow";
 
 // TODO: replace with your real details
 const EMAIL = "hello@yourdomain.com";
@@ -88,12 +88,12 @@ export default function Contact() {
       variants={container}
       initial="hidden"
       animate="visible"
-      className="grid min-h-dvh grid-rows-[1fr_auto_1fr] gap-y-10 p-3 pt-24 md:p-4 md:pt-28 lg:p-6 lg:pt-28"
+      className="flex-1 flex-center"
     >
-      {/* Row 2: details on the left, form on the right (stacked on mobile) */}
-      <div className="row-start-2 grid w-full max-w-6xl mx-auto items-center gap-12 lg:grid-cols-2 lg:gap-24">
-        {/* Left: intro, details, socials */}
-        <div className="flex flex-col">
+      {/* Slides run left to right and scroll on the x axis at every width */}
+      <HorizontalRow>
+        {/* Slide 1: intro, details, socials */}
+        <Slide>
           <motion.p
             variants={item}
             className="mb-4 text-sm font-semibold uppercase tracking-[0.25em] text-black/50"
@@ -166,92 +166,87 @@ export default function Contact() {
               </a>
             ))}
           </motion.div>
-        </div>
+        </Slide>
 
-        {/* Right: form card */}
-        <motion.form
-          variants={item}
-          onSubmit={handleSubmit}
-          className="flex w-full flex-col gap-8 rounded-4xl border border-gray-100 bg-white/50 p-5 shadow-lg backdrop-blur-md sm:p-6 md:p-10 lg:max-w-xl lg:justify-self-end"
-        >
-          <div className="grid gap-8 md:grid-cols-2">
-            <label className="block">
-              <span className="text-xs font-semibold uppercase tracking-widest text-black/40">
-                Name
-              </span>
-              <input
-                name="name"
-                type="text"
-                required
-                autoComplete="name"
-                placeholder="Your name"
-                className={fieldClass}
-              />
-            </label>
-
-            <label className="block">
-              <span className="text-xs font-semibold uppercase tracking-widest text-black/40">
-                Email
-              </span>
-              <input
-                name="email"
-                type="email"
-                required
-                autoComplete="email"
-                placeholder="you@example.com"
-                className={fieldClass}
-              />
-            </label>
-          </div>
-
-          <label className="block">
-            <span className="text-xs font-semibold uppercase tracking-widest text-black/40">
-              Message
-            </span>
-            <textarea
-              name="message"
-              required
-              rows={5}
-              placeholder="Tell me about your project..."
-              className={`${fieldClass} resize-none`}
-            />
-          </label>
-
-          {/* Button: label rolls up on hover, same idea as the header tabs */}
-          <button
-            type="submit"
-            className="group relative flex w-full items-center justify-center overflow-hidden rounded-full bg-primary px-8 py-4 text-base font-semibold text-black transition-shadow duration-300 hover:shadow-[0_8px_30px_-8px_rgba(3,252,127,0.8)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/40 sm:w-auto sm:self-start"
+        {/* Slide 2: form card, scrolled to on the x axis */}
+        <Slide>
+          <motion.form
+            variants={item}
+            onSubmit={handleSubmit}
+            className="flex flex-col gap-8 rounded-4xl border border-gray-100 bg-white/50 p-5 shadow-lg backdrop-blur-md sm:p-6 md:p-10"
           >
-            <span className="flex items-center gap-2 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-[-150%]">
-              {status === "sent" ? (
-                <>
-                  <BiCheckCircle className="text-xl" aria-hidden="true" />
-                  Opening your mail app
-                </>
-              ) : (
-                <>
-                  Send message
-                  <BiSend className="text-xl" aria-hidden="true" />
-                </>
-              )}
-            </span>
-            <span
-              aria-hidden="true"
-              className="absolute flex translate-y-[150%] items-center gap-2 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0"
-            >
-              {status === "sent" ? "Thank you" : "Let's go"}
-              <BiRightArrowAlt className="text-xl" />
-            </span>
-          </button>
-        </motion.form>
-      </div>
+            <div className="grid gap-8 md:grid-cols-2">
+              <label className="block">
+                <span className="text-xs font-semibold uppercase tracking-widest text-black/40">
+                  Name
+                </span>
+                <input
+                  name="name"
+                  type="text"
+                  required
+                  autoComplete="name"
+                  placeholder="Your name"
+                  className={fieldClass}
+                />
+              </label>
 
-      {/* Row 3: the one and only title, pinned to the bottom */}
-      <div className="row-start-3 self-end">
-        <RevealText className="text-6xl sm:text-7xl lg:text-8xl">
-          Contact
-        </RevealText>
-      </div>
+              <label className="block">
+                <span className="text-xs font-semibold uppercase tracking-widest text-black/40">
+                  Email
+                </span>
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                  className={fieldClass}
+                />
+              </label>
+            </div>
+
+            <label className="block">
+              <span className="text-xs font-semibold uppercase tracking-widest text-black/40">
+                Message
+              </span>
+              <textarea
+                name="message"
+                required
+                rows={5}
+                placeholder="Tell me about your project..."
+                className={`${fieldClass} resize-none`}
+              />
+            </label>
+
+            {/* Button: label rolls up on hover, same idea as the header tabs */}
+            <button
+              type="submit"
+              className="group relative flex w-full items-center justify-center overflow-hidden rounded-full bg-primary px-8 py-4 text-base font-semibold text-black transition-shadow duration-300 hover:shadow-[0_8px_30px_-8px_rgba(3,252,127,0.8)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/40 sm:w-auto sm:self-start"
+            >
+              <span className="flex items-center gap-2 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-[-150%]">
+                {status === "sent" ? (
+                  <>
+                    <BiCheckCircle className="text-xl" aria-hidden="true" />
+                    Opening your mail app
+                  </>
+                ) : (
+                  <>
+                    Send message
+                    <BiSend className="text-xl" aria-hidden="true" />
+                  </>
+                )}
+              </span>
+              <span
+                aria-hidden="true"
+                className="absolute flex translate-y-[150%] items-center gap-2 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0"
+              >
+                {status === "sent" ? "Thank you" : "Let's go"}
+                <BiRightArrowAlt className="text-xl" />
+              </span>
+            </button>
+          </motion.form>
+        </Slide>
+      </HorizontalRow>
     </motion.div>
   );
 }

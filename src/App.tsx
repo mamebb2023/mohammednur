@@ -1,10 +1,10 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Home from './components/landing/home.tsx'
-import About from './components/landing/about.tsx'
-import Projects from './components/landing/projects.tsx'
-import Contact from './components/landing/contact.tsx'
-import LandingLayout from './components/layout/LandingLayout.tsx'
-import InitialLoader from './components/layout/InitialLoader.tsx'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "@/pages/home.tsx";
+import About from "@/pages/about.tsx";
+import Projects from "@/pages/projects.tsx";
+import Contact from "@/pages/contact.tsx";
+import LandingLayout from "@/components/layout/LandingLayout.tsx";
+import InitialLoader from "@/components/layout/InitialLoader.tsx";
 
 function App() {
   return (
@@ -20,7 +20,7 @@ function App() {
         </Routes>
       </InitialLoader>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;
