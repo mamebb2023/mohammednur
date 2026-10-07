@@ -3,7 +3,7 @@ export const easeOutExpo = [0.22, 1, 0.36, 1] as const;
 // The single source of truth for routes: the header tabs and the page titles
 // both read from this.
 export const routes = [
-  { label: "Home", path: "/" },
+  { label: "Hey", path: "/" },
   { label: "About", path: "/about" },
   { label: "Projects", path: "/projects" },
   { label: "Contact", path: "/contact" },
@@ -12,7 +12,7 @@ export const routes = [
 // "/about" -> "About", "/" -> "Home"
 export function pageNameFromPath(pathname: string) {
   const match = routes.find(({ path }) =>
-    path === "/" ? pathname === "/" : pathname.startsWith(path)
+    path === "/" ? pathname === "/" : pathname.startsWith(path),
   );
 
   return match?.label ?? "Home";
@@ -42,3 +42,5 @@ export const hoverSpring = {
   damping: 32,
   bounce: 0,
 };
+
+export const easeInOutQuart = [0.76, 0, 0.24, 1] as const;

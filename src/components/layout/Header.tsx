@@ -130,7 +130,7 @@ export default function Header() {
                       style={{ transformOrigin: "0% 100%" }}
                       className="block"
                     >
-                      {tab.label}
+                      {tab.label === "Hey" ? "Home" : tab.label}
                     </motion.span>
 
                     <motion.span
@@ -142,7 +142,7 @@ export default function Header() {
                       style={{ transformOrigin: "0% 100%" }}
                       className="absolute inset-0 block"
                     >
-                      {tab.label}
+                      {tab.label === "Hey" ? "Home" : tab.label}
                     </motion.span>
                   </motion.span>
                 </span>
