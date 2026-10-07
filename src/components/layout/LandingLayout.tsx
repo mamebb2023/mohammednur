@@ -4,6 +4,7 @@ import Header from "./Header";
 import Lotus from "../Lotus";
 import { easeOutExpo } from "@/constants";
 import RevealText from "../ui/RevealText";
+import ScrollFade from "./ScrollFade";
 
 const easeIn = [0.4, 0, 1, 1] as const;
 
@@ -24,7 +25,7 @@ export default function LandingLayout() {
   };
 
   return (
-    <main className="relative flex flex-col justify-between min-h-screen p-4 gap-2">
+    <main className="relative flex flex-col justify-between h-screen overflow-hidden gap-2">
       {/* lotus fixed */}
       <div className="-z-10 fixed size-full top-1/2 left-5/6 md:left-1/2 lg:left-1/3">
         <Lotus />
@@ -41,14 +42,16 @@ export default function LandingLayout() {
           variants={pageVariants}
           animate="animate"
           exit="exit"
-          className="flex-1 flex items-center"
+          className="min-h-0 flex-1"
         >
-          {outlet}
+          <ScrollFade>{outlet}</ScrollFade>
         </motion.div>
       </AnimatePresence>
 
       {/* The one title for every page, its label comes from the route */}
-      <RevealText className="text-6xl sm:text-7xl lg:text-8xl" />
+      <div className="p-4">
+        <RevealText className="text-7xl lg:text-8xl" />
+      </div>
     </main>
   );
 }

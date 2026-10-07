@@ -146,21 +146,17 @@ export default function InitialLoader({
           <motion.div
             key="loader"
             initial={false}
-            exit={
-              reduceMotion
-                ? { opacity: 0, transition: { duration: 0.3 } }
-                : {
-                    y: "-100%",
-                    transition: { duration: 0.9, ease: easeInOutQuart },
-                  }
-            }
+            exit={{
+              y: "-100%",
+              transition: { duration: 0.9, ease: easeInOutQuart },
+            }}
             className="fixed inset-0 z-100 flex items-end p-6 bg-primary"
             role="status"
             aria-label="Loading"
           >
             <motion.span
               aria-hidden="true"
-              initial={{ opacity: 0, y: reduceMotion ? 0 : 20 }}
+              initial={{ opacity: 0, y: 20 }}
               animate={{
                 opacity: 1,
                 y: 0,
@@ -168,7 +164,7 @@ export default function InitialLoader({
               }}
               exit={{
                 opacity: 0,
-                y: reduceMotion ? 0 : -40,
+                y: -40,
                 transition: { duration: 0.4, ease: easeOutExpo },
               }}
               className="inline-block text-5xl md:text-7xl lg:text-9xl font-light tabular-nums tracking-tight text-white "

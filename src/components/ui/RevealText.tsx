@@ -16,7 +16,7 @@ type RevealTextProps = {
 
 export default function RevealText({
   children,
-  delay,
+  delay = 0.1,
   duration = 0.5,
   gradient = true,
   className = "",
@@ -26,7 +26,7 @@ export default function RevealText({
 
   return (
     // Clipping mask: the text is invisible until it rises into this box
-    <span className={`block overflow-hidden py-[0.15em] ${className}`}>
+    <span className={`block overflow-hidden ${className}`}>
       <AnimatePresence mode="wait">
         <motion.span
           key={pathname}

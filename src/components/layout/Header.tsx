@@ -56,7 +56,7 @@ export default function Header() {
     path === "/" ? pathname === "/" : pathname.startsWith(path);
 
   return (
-    <header className="flex justify-between items-center z-50">
+    <header className="p-4 flex justify-between items-center z-50">
       <div className="flex-center w-16">
         <Lotus size="h-8 w-5" />
       </div>
