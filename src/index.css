@@ -8,7 +8,7 @@
   font-weight: normal;
   src:
     local("Gendy Regular"),
-    url("./fonts/Gendy.woff") format("woff");
+    url("/fonts/Gendy.woff") format("woff");
 }
 
 @theme {
