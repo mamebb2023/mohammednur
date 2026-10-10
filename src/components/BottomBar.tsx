@@ -1,38 +1,10 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { rollTransition, rollVariants } from "@/constants";
+import Roll from "@/components/ui/Roll";
 
 const UNIT = 10; // px between ruler ticks
 
 type Sec = { name: string; left: number };
 type SecState = { idx: number; total: number; name: string; dir: number };
-
-/**
- * A value that rolls out and is replaced in place.
- * dir  1: old one leaves upward, new one rises from below
- * dir -1: the reverse (going backwards)
- */
-function Roll({ value, dir }: { value: string; dir: number }) {
-  return (
-    <span className="-my-0.5 inline-grid overflow-hidden py-0.5">
-      <AnimatePresence initial={false} custom={dir}>
-        <motion.span
-          key={value}
-          custom={dir}
-          variants={rollVariants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          transition={rollTransition}
-          style={{ transformOrigin: "0% 100%" }}
-          className="col-start-1 row-start-1 whitespace-nowrap"
-        >
-          {value}
-        </motion.span>
-      </AnimatePresence>
-    </span>
-  );
-}
 
 export default function BottomBar({
   scrollerRef,

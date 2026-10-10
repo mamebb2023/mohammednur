@@ -14,7 +14,7 @@ import Lotus from "./Lotus";
 
 // Each hash maps to an element inside the scroller with id="about" (or data-section="ABOUT", case-insensitive).
 const sections = [
-  { label: "Hey", path: "/" },
+  { label: "Home", path: "/" },
   { label: "About", path: "#about" },
   { label: "Projects", path: "#projects" },
   { label: "Testimonials", path: "#testimonials" },
@@ -210,7 +210,7 @@ export default function Header({
                       style={{ transformOrigin: "0% 100%" }}
                       className="block"
                     >
-                      {tab.label === "Hey" ? "Home" : tab.label}
+                      {tab.label}
                     </motion.span>
 
                     <motion.span
@@ -222,7 +222,7 @@ export default function Header({
                       style={{ transformOrigin: "0% 100%" }}
                       className="absolute inset-0 block"
                     >
-                      {tab.label === "Hey" ? "Home" : tab.label}
+                      {tab.label}
                     </motion.span>
                   </motion.span>
                 </span>
