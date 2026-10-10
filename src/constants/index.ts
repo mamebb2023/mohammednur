@@ -9,6 +9,22 @@ export const routes = [
   { label: "Contact", path: "/contact" },
 ];
 
+export const container = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.09, delayChildren: 0.2, delay: 1 },
+  },
+};
+
+export const fadeUp = {
+  hidden: { opacity: 0, y: 32 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: easeOutExpo, delay: 0.4 },
+  },
+};
+
 // "/about" -> "About", "/" -> "Home"
 export function pageNameFromPath(pathname: string) {
   const match = routes.find(({ path }) =>
