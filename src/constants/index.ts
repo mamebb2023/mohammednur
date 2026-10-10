@@ -1,13 +1,23 @@
 export const easeOutExpo = [0.22, 1, 0.36, 1] as const;
 
-// The single source of truth for routes: the header tabs and the page titles
-// both read from this.
-export const routes = [
-  { label: "Hey", path: "/" },
-  { label: "About", path: "/about" },
-  { label: "Projects", path: "/projects" },
-  { label: "Contact", path: "/contact" },
-];
+// A value that rolls out and is replaced in place (digits, section names).
+// dir 1 = going forward: old one leaves upward, new one rises from below. dir -1 = going back: reversed.
+export const rollVariants = {
+  enter: (dir: number) => ({ y: dir > 0 ? "130%" : "-130%", rotate: dir > 0 ? 10 : -10 }),
+  center: { y: "0%", rotate: 0 },
+  exit: (dir: number) => ({ y: dir > 0 ? "-130%" : "130%", rotate: dir > 0 ? -10 : 10 }),
+};
+
+// Header tab label roll, moved over from Header.tsx
+export const topLabelVariants = {
+  idle: { y: "0%", rotate: 0 },
+  rolled: { y: "-130%", rotate: -10 },
+};
+
+export const bottomLabelVariants = {
+  idle: { y: "130%", rotate: 10 },
+  rolled: { y: "0%", rotate: 0 },
+};
 
 export const container = {
   hidden: {},
@@ -24,15 +34,6 @@ export const fadeUp = {
     transition: { duration: 0.8, ease: easeOutExpo, delay: 0.4 },
   },
 };
-
-// "/about" -> "About", "/" -> "Home"
-export function pageNameFromPath(pathname: string) {
-  const match = routes.find(({ path }) =>
-    path === "/" ? pathname === "/" : pathname.startsWith(path),
-  );
-
-  return match?.label ?? "Home";
-}
 
 export const rollTransition = { duration: 0.5, ease: easeOutExpo };
 

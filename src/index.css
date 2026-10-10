@@ -19,7 +19,7 @@
 
 @layer base {
   * {
-    @apply scrollbar-none md:scrollbar-thin;
+    @apply scrollbar-none;
   }
   * {
     scrollbar-color: var(--color-primary) transparent;
