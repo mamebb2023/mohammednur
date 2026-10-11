@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useMotionValueEvent } from "framer-motion";
-import { easeInOutQuart, easeOutExpo } from "@/constants";
+import { easeInOutQuart } from "@/constants";
 import { useLoadProgress } from "@/hooks/useLoadProgress";
 import Roll from "@/components/ui/Roll";
 
@@ -38,7 +38,7 @@ export default function InitialLoader({
             key="loader"
             initial={false}
             exit={{
-              y: "-100%",
+              opacity: 0,
               transition: { duration: 0.9, ease: easeInOutQuart },
             }}
             className="fixed inset-0 z-100 overflow-hidden bg-white"
@@ -50,17 +50,17 @@ export default function InitialLoader({
             {/* same big-number treatment and corner as the hero's "01" */}
             <motion.div
               aria-hidden="true"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{
-                opacity: 1,
-                y: 0,
-                transition: { duration: 0.8, ease: easeOutExpo },
-              }}
-              exit={{
-                opacity: 0,
-                y: -40,
-                transition: { duration: 0.4, ease: easeOutExpo },
-              }}
+              // initial={{ opacity: 0, y: 20 }}
+              // animate={{
+              //   opacity: 1,
+              //   y: 0,
+              //   transition: { duration: 0.8, ease: easeOutExpo },
+              // }}
+              // exit={{
+              //   opacity: 0,
+              //   y: -40,
+              //   transition: { duration: 0.4, ease: easeOutExpo },
+              // }}
               className="absolute bottom-2 left-[1.5vw] flex select-none items-end font-gendy text-[24vh] font-semibold leading-[0.8] tabular-nums text-primary"
             >
               {digits.map((d, i) => {

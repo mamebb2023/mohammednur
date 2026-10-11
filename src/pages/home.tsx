@@ -1,5 +1,6 @@
 import { usePageTitle } from "@/hooks/usePageTitle";
 import Hero from "@/components/sections/Hero";
+import About from "@/components/sections/About";
 
 export default function Home() {
   usePageTitle("Mohammednur | Software Engineer");
@@ -7,9 +8,7 @@ export default function Home() {
   return (
     <div className="flex gap-2">
       <Hero />
-      <section data-section="ABOUT" className="w-screen">
-        About
-      </section>
+      <About />
       <section data-section="PROJECTS" className="w-screen">
         Projects
       </section>

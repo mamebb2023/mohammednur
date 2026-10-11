@@ -1,20 +1,6 @@
+import { container, rise } from "@/constants";
 import { motion } from "framer-motion";
 import { BiRightArrowAlt } from "react-icons/bi";
-import { easeOutExpo } from "@/constants";
-
-const container = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
-};
-
-const rise = {
-  hidden: { opacity: 0, y: 28 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.9, ease: easeOutExpo },
-  },
-};
 
 export default function Hero() {
   return (

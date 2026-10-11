@@ -62,6 +62,16 @@ export const hoverSpring = {
 
 export const easeInOutQuart = [0.76, 0, 0.24, 1] as const;
 
+export const staggerContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
+};
+
+export const rise = {
+  hidden: { opacity: 0, y: 28 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: easeOutExpo } },
+};
+
 export const projects = [
   {
     color: "#d223c3ff",
