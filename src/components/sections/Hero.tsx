@@ -9,12 +9,15 @@ export default function Hero() {
       className="w-screen relative flex items-center pl-[6vw] pr-[4vw] p-3"
     >
       {/* giant faint section number */}
-      <span
+      <motion.span
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 1.2, ease: "easeInOut", delay: 0.5 }}
         aria-hidden="true"
         className="pointer-events-none absolute bottom-3 left-[1.5vw] select-none font-gendy text-[26vh] italic font-semibold leading-[0.8] text-primary/10"
       >
         01
-      </span>
+      </motion.span>
 
       {/* vertical tag, left edge */}
       <span className="absolute left-3.5 top-4 rotate-180 whitespace-nowrap font-mono text-[10px] font-medium tracking-[0.24em] text-gray-500 [writing-mode:vertical-rl]">
@@ -31,7 +34,8 @@ export default function Hero() {
           variants={rise}
           className="mb-[3.2vh] font-mono text-[11px] font-medium tracking-[0.3em] text-gray-600"
         >
-          FULL-STACK DEV · CALM UNDER LOAD
+          FULL-STACK DEV <span className="text-primary">·</span> FROM IDEA TO
+          SHIPPED
         </motion.p>
 
         <motion.p
@@ -52,11 +56,11 @@ export default function Hero() {
           variants={rise}
           className="mt-[3.6vh] max-w-[52ch] text-[clamp(15px,1.15vw,18px)] leading-[1.75] text-gray-600"
         >
-          Software developer with five years of experience building full-stack
-          web apps with React and Next.js. I've shipped everything from an AI
-          tool that turns a text prompt into a React component to a health
-          assistant and a bilingual clinic site. I care about clean interfaces,
-          smooth motion, and code that stays easy to change.
+          Software developer with five years of building full-stack web apps
+          with React and Next.js. I've shipped everything from an AI tool that
+          turns a text prompt into a React component to a health assistant and a
+          bilingual clinic site. I care about clean interfaces, smooth motion,
+          and code that stays easy to change.
         </motion.p>
 
         <motion.div
@@ -79,7 +83,7 @@ export default function Hero() {
       </motion.div>
 
       {/* vertical side note, right edge */}
-      <span className="absolute right-[3vw] top-1/2 -translate-y-1/2 font-mono text-[10px] font-medium tracking-[0.4em] text-gray-500 [writing-mode:vertical-rl]">
+      <span className="absolute right-[3vw] bottom-3 font-mono text-[10px] font-medium tracking-[0.4em] text-gray-500 [writing-mode:vertical-rl]">
         PORTFOLIO — 2026 · ADDIS ABABA · UTC+3
       </span>
     </section>

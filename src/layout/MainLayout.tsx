@@ -6,6 +6,7 @@ import ReactLenis from "lenis/react";
 import ScrollFade from "@/components/ScrollFade";
 import BottomBar from "@/components/BottomBar";
 import Lotus from "@/components/Lotus";
+import SectionIcons from "@/components/SectionIcons";
 
 // Where the lotus's centre ends up at the end of the scroll, as a fraction of the viewport width.
 const LOTUS_END_CENTER = 0.15;
@@ -61,6 +62,9 @@ const MainLayout = () => {
         >
           <Lotus />
         </motion.div>
+
+        {/* big faint icons that arrive with their section, sweeping right -> left faster than the page */}
+        <SectionIcons scrollerRef={scrollerRef} />
 
         <Header scrollerRef={scrollerRef} />
 

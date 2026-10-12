@@ -3,6 +3,7 @@ import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
 import Projects from "@/components/sections/Projects";
 import Contact from "@/components/sections/Contact";
+import Testimonials from "@/components/sections/Testimonials";
 
 export default function Home() {
   usePageTitle("Mohammednur | Software Engineer");
@@ -12,9 +13,7 @@ export default function Home() {
       <Hero />
       <About />
       <Projects />
-      <section data-section="TESTIMONIALS" className="w-screen">
-        Testimonials
-      </section>
+      <Testimonials />
       <Contact />
     </div>
   );

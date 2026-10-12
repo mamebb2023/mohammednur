@@ -7,10 +7,10 @@ import {
   BiLogoLinkedin,
   BiRotateLeft,
 } from "react-icons/bi";
+import { FaXTwitter } from "react-icons/fa6";
 import { rise, staggerContainer } from "@/constants";
 
-// TODO: put your real details here
-const EMAIL = "you@example.com";
+const EMAIL = "mamebb2023@gmail.com";
 const SOCIALS = [
   {
     label: "GitHub",
@@ -19,8 +19,13 @@ const SOCIALS = [
   },
   {
     label: "LinkedIn",
-    href: "https://linkedin.com/in/your-handle",
+    href: "https://linkedin.com/in/mohammednur-seid",
     Icon: BiLogoLinkedin,
+  },
+  {
+    label: "X",
+    href: "https://x.com/thatsolodev",
+    Icon: FaXTwitter,
   },
 ];
 
@@ -52,12 +57,15 @@ export default function Contact() {
       className="relative flex w-screen items-center justify-end pl-[6vw] pr-[3vw]"
     >
       {/* giant faint section number */}
-      <span
+      <motion.span
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 1.2, ease: "easeInOut", delay: 0.5 }}
         aria-hidden="true"
         className="pointer-events-none absolute bottom-2 left-[1.5vw] select-none font-gendy text-[26vh] italic font-semibold leading-[0.8] text-primary/10"
       >
         05
-      </span>
+      </motion.span>
 
       {/* vertical tag, left edge */}
       <span className="absolute left-3.5 top-4 rotate-180 whitespace-nowrap font-mono text-[10px] font-medium tracking-[0.24em] text-gray-500 [writing-mode:vertical-rl]">
@@ -135,7 +143,9 @@ export default function Contact() {
           className="mt-[7vh] flex flex-wrap items-center justify-end gap-6.5 font-mono text-[10px] tracking-[0.18em] text-gray-500"
         >
           <span>© {new Date().getFullYear()} MOHAMMEDNUR</span>
-          <span>BUILT WITH REACT · TAILWIND · FRAMER MOTION</span>
+          <span className="w-10 h-px bg-gray-200"></span>
+          <span>BUILT WITH ❤️ BY ME</span>
+          <span className="w-10 h-px bg-gray-200"></span>
           <button
             type="button"
             // bubbles up to the scroller, which glides back to the start

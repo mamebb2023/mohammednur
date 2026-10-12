@@ -39,7 +39,9 @@ export default function Projects() {
         className="relative z-10 flex w-[calc(100vw-40px)] shrink-0 flex-col justify-center pl-[6vw] pr-[8vw] lg:w-[42vw] lg:pr-[5vw]"
       >
         <motion.span
-          variants={rise}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1.2, ease: "easeInOut", delay: 0.5 }}
           className="font-mono text-xs font-medium tracking-[0.2em] text-primary"
         >
           03
@@ -136,7 +138,7 @@ export default function Projects() {
               </figure>
 
               <div className="max-w-[36ch]">
-                <h3 className="font-gendy text-[clamp(26px,2.4vw,42px)] font-semibold leading-[1.1] transition-colors duration-300 group-hover:text-primary">
+                <h3 className="font-gendy text-[clamp(26px,2.4vw,42px)] font-semibold leading-[1.1] transition-colors duration-300">
                   {p.title}
                 </h3>
                 <p className="mb-5 mt-3 font-mono text-[11px] font-medium tracking-[0.24em] text-gray-600">

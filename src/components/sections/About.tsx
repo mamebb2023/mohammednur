@@ -8,8 +8,23 @@ const ledger = [
     term: "CORE STACK",
     detail: "TypeScript · React · Next.js · Node · Prisma",
   },
-  { term: "CURRENTLY", detail: "Founder @ BlackBronze" },
-  { term: "STATUS", detail: "open to select freelance", live: true },
+  {
+    term: "CURRENTLY",
+    detail: (
+      <>
+        Founder @{" "}
+        <a
+          href="https://blackbronze.vercel.app"
+          target="_blank"
+          rel="noopener noreferrer"
+          className=" underline decoration-primary/40 underline-offset-4 transition-colors hover:decoration-primary"
+        >
+          BlackBronze
+        </a>
+      </>
+    ),
+  },
+  { term: "STATUS", detail: "open to any freelance work", live: true },
 ];
 
 export default function About() {
@@ -19,12 +34,15 @@ export default function About() {
       className="relative flex w-screen items-center pl-[6vw] pr-[4vw]"
     >
       {/* giant faint section number */}
-      <span
+      <motion.span
+        initial={{ opacity: 0, x: 20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 1.2, ease: "easeInOut", delay: 0.5 }}
         aria-hidden="true"
         className="pointer-events-none absolute bottom-2 left-[1.5vw] select-none font-gendy text-[26vh] italic font-semibold leading-[0.8] text-primary/10"
       >
         02
-      </span>
+      </motion.span>
 
       {/* vertical tag, left edge */}
       <span className="absolute left-3.5 top-4 rotate-180 whitespace-nowrap font-mono text-[10px] font-medium tracking-[0.24em] text-gray-500 [writing-mode:vertical-rl]">
