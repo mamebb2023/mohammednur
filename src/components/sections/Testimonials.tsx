@@ -88,7 +88,7 @@ export default function Testimonials() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
           style={{ "--tw": layout[i % layout.length].width } as CSSProperties}
-          className="relative z-10 flex h-full w-[calc(100vw-40px)] shrink-0 flex-col justify-center border-l border-gray-100 px-[4vw] lg:w-(--tw)"
+          className={`relative z-10 flex h-full w-[calc(100vw-40px)] shrink-0 flex-col justify-center px-[4vw] lg:w-(--tw) ${i !== 0 && " border-l border-gray-100"}`}
         >
           <motion.div
             variants={rise}
