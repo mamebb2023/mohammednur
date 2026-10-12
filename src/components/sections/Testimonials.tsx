@@ -3,25 +3,26 @@ import { motion } from "framer-motion";
 import { BiSolidQuoteAltLeft } from "react-icons/bi";
 import { rise, staggerContainer } from "@/constants";
 
-// TODO: fill these in. Three fit the layout best.
+// DRAFTS written from the work itself, not quotes from these clients yet.
+// Get each of them to approve or reword their line before this goes live.
 const testimonials = [
   {
     quote:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    name: "CLIENT NAME",
-    role: "ROLE · COMPANY",
+      "I needed a landing page that shows my work the way I edit: fast, clean and built around the content. Mohammednur delivered exactly that. It looks sharp on phone and desktop, and my work is easy to find.",
+    name: "MICHAEL",
+    role: "VIDEO EDITOR & CONTENT CREATOR",
   },
   {
     quote:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    name: "CLIENT NAME",
-    role: "ROLE · COMPANY",
+      "Mohammednur built the backend for our grid bot on Jupiter. The structure is clean, the code is easy to follow, and he explained every decision along the way. Solid engineering from start to finish.",
+    name: "VALGRID",
+    role: "JUPITER GRID BOT",
   },
   {
     quote:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-    name: "CLIENT NAME",
-    role: "ROLE · COMPANY",
+      "The frontend design for WeMD Africa was clear, modern and easy for patients to use. The English and Amharic versions both felt natural, and the step-by-step consultation form made a long process feel simple.",
+    name: "WEMD AFRICA",
+    role: "ONLINE DERMATOLOGY CLINIC",
   },
 ];
 
@@ -60,9 +61,7 @@ export default function Testimonials() {
         className="relative z-10 flex w-[calc(100vw-40px)] shrink-0 flex-col justify-center pl-[6vw] pr-[8vw] lg:w-[42vw] lg:pr-[5vw]"
       >
         <motion.span
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1.2, ease: "easeInOut", delay: 0.5 }}
+          variants={rise}
           className="font-mono text-xs font-medium tracking-[0.2em] text-primary"
         >
           04
@@ -89,9 +88,7 @@ export default function Testimonials() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
           style={{ "--tw": layout[i % layout.length].width } as CSSProperties}
-          className={`relative z-10 flex h-full w-[calc(100vw-40px)] shrink-0 flex-col justify-center px-[4vw] lg:w-(--tw) ${
-            i !== 0 && "border-l border-gray-100"
-          }`}
+          className="relative z-10 flex h-full w-[calc(100vw-40px)] shrink-0 flex-col justify-center border-l border-gray-100 px-[4vw] lg:w-(--tw)"
         >
           <motion.div
             variants={rise}
