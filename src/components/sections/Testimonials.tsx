@@ -26,7 +26,7 @@ const testimonials = [
   },
 ];
 
-// card width and a small vertical drift per card, so the row doesn't feel like a grid
+// card width and a small vertical drift per card, so the row doesn't feel like a grid (desktop only)
 const layout = [
   { width: "52vw", offset: "0vh" },
   { width: "60vw", offset: "7vh" },
@@ -37,18 +37,18 @@ export default function Testimonials() {
   return (
     <section
       data-section="TESTIMONIALS"
-      className="relative flex w-max items-stretch"
+      className="relative flex items-stretch max-md:w-full max-md:flex-col md:w-max"
     >
-      {/* giant faint section number */}
+      {/* giant faint section number (desktop only: on mobile it would sit at the bottom of the whole column) */}
       <span
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-2 left-[1.5vw] select-none font-gendy text-[26vh] italic font-semibold leading-[0.8] text-primary/10"
+        className="pointer-events-none absolute bottom-2 left-[1.5vw] hidden select-none font-gendy text-[26vh] italic font-semibold leading-[0.8] text-primary/10 md:block"
       >
         04
       </span>
 
       {/* vertical tag, left edge */}
-      <span className="absolute left-3.5 top-4 rotate-180 whitespace-nowrap font-mono text-[10px] font-medium tracking-[0.24em] text-gray-500 [writing-mode:vertical-rl]">
+      <span className="absolute left-3.5 top-4 hidden rotate-180 whitespace-nowrap font-mono text-[10px] font-medium tracking-[0.24em] text-gray-500 [writing-mode:vertical-rl] md:block">
         SEC. 04 — TESTIMONIALS
       </span>
 
@@ -58,7 +58,7 @@ export default function Testimonials() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
-        className="relative z-10 flex w-[calc(100vw-40px)] shrink-0 flex-col justify-center pl-[6vw] pr-[8vw] lg:w-[42vw] lg:pr-[5vw]"
+        className="relative z-10 flex w-full shrink-0 flex-col justify-center py-10 pl-6 pr-6 md:w-[calc(100vw-40px)] md:py-0 md:pl-[6vw] md:pr-[8vw] lg:w-[42vw] lg:pr-[5vw]"
       >
         <motion.span
           variants={rise}
@@ -88,16 +88,18 @@ export default function Testimonials() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
           style={{ "--tw": layout[i % layout.length].width } as CSSProperties}
-          className={`relative z-10 flex h-full w-[calc(100vw-40px)] shrink-0 flex-col justify-center px-[4vw] lg:w-(--tw) ${i !== 0 && " border-l border-gray-100"}`}
+          className={`relative z-10 flex w-full shrink-0 flex-col justify-center px-6 py-10 md:h-full md:w-[calc(100vw-40px)] md:px-[4vw] md:py-0 lg:w-(--tw) ${
+            i !== 0 ? "border-t border-gray-100 md:border-t-0 md:border-l" : ""
+          }`}
         >
           <motion.div
             variants={rise}
-            style={{ top: layout[i % layout.length].offset }}
-            className="relative"
+            style={{ "--off": layout[i % layout.length].offset } as CSSProperties}
+            className="relative md:top-(--off)"
           >
             <BiSolidQuoteAltLeft size={26} className="mb-6 text-primary" />
 
-            <blockquote className="max-w-[30ch] font-gendy text-[clamp(20px,1.6vw,30px)] font-medium italic leading-[1.55]">
+            <blockquote className="max-w-[30ch] font-gendy text-[clamp(20px,1.6vw,30px)] font-medium italic leading-[1.55] max-md:text-xl">
               “{t.quote}”
             </blockquote>
 

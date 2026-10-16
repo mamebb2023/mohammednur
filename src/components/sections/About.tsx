@@ -17,7 +17,7 @@ const ledger = [
           href="https://blackbronze.vercel.app"
           target="_blank"
           rel="noopener noreferrer"
-          className=" underline decoration-primary/40 underline-offset-4 transition-colors hover:decoration-primary"
+          className="underline decoration-primary/40 underline-offset-4 transition-colors hover:decoration-primary"
         >
           BlackBronze
         </a>
@@ -31,21 +31,20 @@ export default function About() {
   return (
     <section
       data-section="ABOUT"
-      className="relative flex w-screen items-center pl-[6vw] pr-[4vw]"
+      className="relative flex shrink-0 py-10 pl-6 pr-6 md:min-w-screen md:py-3 md:pl-[6vw] md:pr-[4vw] md:max-lg:overflow-x-hidden md:max-lg:overflow-y-auto md:max-lg:overscroll-y-contain"
     >
-      {/* giant faint section number */}
       <motion.span
         initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 1.2, ease: "easeInOut", delay: 0.5 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 1.2, ease: "easeInOut", delay: 0.2 }}
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-2 left-[1.5vw] select-none font-gendy text-[26vh] italic font-semibold leading-[0.8] text-primary/10"
+        className="pointer-events-none absolute bottom-1 left-[1.5vw] select-none font-gendy text-[18svh] italic font-semibold leading-[0.8] text-primary/10 md:bottom-2 md:text-[26svh]"
       >
         02
       </motion.span>
 
-      {/* vertical tag, left edge */}
-      <span className="absolute left-3.5 top-4 rotate-180 whitespace-nowrap font-mono text-[10px] font-medium tracking-[0.24em] text-gray-500 [writing-mode:vertical-rl]">
+      <span className="absolute left-3.5 top-4 hidden rotate-180 whitespace-nowrap font-mono text-[10px] font-medium tracking-[0.24em] text-gray-500 [writing-mode:vertical-rl] md:block">
         SEC. 02 — ABOUT
       </span>
 
@@ -53,12 +52,12 @@ export default function About() {
         variants={staggerContainer}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.3 }}
-        className="relative z-10"
+        viewport={{ once: true, amount: 0.2 }}
+        className="relative z-10 my-auto w-full"
       >
         <motion.header
           variants={rise}
-          className="mb-[5vh] flex items-baseline gap-4"
+          className="mb-[clamp(16px,5svh,40px)] flex flex-wrap items-baseline gap-x-4 gap-y-1"
         >
           <span className="font-mono text-xs font-medium tracking-[0.2em] text-primary">
             02
@@ -66,16 +65,17 @@ export default function About() {
           <h2 className="font-gendy text-[clamp(44px,5vw,92px)] font-semibold leading-[1.05]">
             About
           </h2>
-          <span className="font-mono text-[11px] tracking-[0.18em] text-gray-500">
+          <span className="font-mono text-[10px] tracking-[0.18em] text-gray-500 sm:text-[11px]">
             THE PERSON BEHIND THE CURSOR
           </span>
         </motion.header>
 
-        <div className="flex flex-col gap-[4.5vh] lg:flex-row lg:items-start lg:gap-[7vw]">
-          <div>
+        {/* mobile: stacked column; md and up: side by side */}
+        <div className="flex flex-col gap-[clamp(20px,4.5svh,40px)] md:flex-row lg:gap-[7vw]">
+          <div className="md:min-w-sm">
             <motion.p
               variants={rise}
-              className="max-w-[30ch] font-gendy text-[clamp(22px,2.05vw,38px)] font-medium leading-[1.45]"
+              className="max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg font-gendy text-[clamp(22px,2.05vw,38px)] font-medium leading-[1.45] max-md:text-[22px]"
             >
               Good software is <em className="italic text-primary">joinery</em>{" "}
               — invisible when it fits, impossible to ignore when it doesn't.
@@ -83,7 +83,7 @@ export default function About() {
 
             <motion.p
               variants={rise}
-              className="mt-[3.6vh] max-w-[46ch] text-[15.5px] leading-[1.8] text-gray-600"
+              className="mt-[clamp(14px,3.6svh,32px)] max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg text-[15px] leading-[1.7] text-gray-600 sm:text-[15.5px] md:leading-[1.8]"
             >
               I'm a full-stack developer who likes turning ideas into tools
               people actually use — an AI generator that writes React components
@@ -93,18 +93,18 @@ export default function About() {
             </motion.p>
           </div>
 
-          <dl className="w-full lg:w-[min(440px,38vw)] lg:flex-none bg-white/15 backdrop-blur-sm rounded-3xl p-3 space-y-1.5">
+          <dl className="w-full max-w-sm sm:max-w-sm md:max-w-md space-y-1.5 rounded-3xl bg-white/15 p-3 lg:w-[min(440px,38vw)] lg:flex-none">
             {ledger.map((row) => (
               <motion.div
                 key={row.term}
                 variants={rise}
                 whileHover={{ x: 10 }}
-                className="group grid grid-cols-[132px_1fr] gap-4.5 px-2.5 py-3.75 transition-colors bg-white/15 rounded-2xl"
+                className="group grid grid-cols-[92px_1fr] gap-3 rounded-2xl bg-white/15 px-2.5 py-3 transition-colors sm:grid-cols-[132px_1fr] sm:gap-4.5 sm:py-3.75"
               >
-                <dt className="pt-1 font-mono text-[10px] font-medium tracking-[0.22em] text-gray-500 transition-colors group-hover:text-white">
+                <dt className="pt-1 font-mono text-[10px] font-medium tracking-[0.16em] text-gray-500 transition-colors group-hover:text-primary sm:tracking-[0.22em]">
                   {row.term}
                 </dt>
-                <dd className="font-mono text-[13.5px] font-medium leading-[1.6]">
+                <dd className="font-mono text-[13px] font-medium leading-[1.6] sm:text-[13.5px]">
                   {row.live && (
                     <span className="mr-2.25 inline-block size-1.75 animate-pulse rounded-full bg-primary" />
                   )}

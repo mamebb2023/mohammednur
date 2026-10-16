@@ -54,7 +54,7 @@ export default function Contact() {
   return (
     <section
       data-section="CONTACT"
-      className="relative flex w-screen items-center justify-end pl-[6vw] pr-[3vw]"
+      className="relative flex w-full items-center justify-end pl-6 pr-6 max-md:min-h-[80svh] max-md:justify-center max-md:py-10 md:w-screen md:pl-[6vw] md:pr-[3vw]"
     >
       {/* giant faint section number */}
       <motion.span
@@ -62,13 +62,13 @@ export default function Contact() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1.2, ease: "easeInOut", delay: 0.5 }}
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-2 left-[1.5vw] select-none font-gendy text-[26vh] italic font-semibold leading-[0.8] text-primary/10"
+        className="pointer-events-none absolute bottom-2 left-[1.5vw] select-none font-gendy text-[18svh] italic font-semibold leading-[0.8] text-primary/10 md:text-[26vh]"
       >
         05
       </motion.span>
 
       {/* vertical tag, left edge */}
-      <span className="absolute left-3.5 top-4 rotate-180 whitespace-nowrap font-mono text-[10px] font-medium tracking-[0.24em] text-gray-500 [writing-mode:vertical-rl]">
+      <span className="absolute left-3.5 top-4 hidden rotate-180 whitespace-nowrap font-mono text-[10px] font-medium tracking-[0.24em] text-gray-500 [writing-mode:vertical-rl] md:block">
         SEC. 05 — CONTACT
       </span>
 
@@ -77,7 +77,7 @@ export default function Contact() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
-        className="relative z-10 flex flex-col justify-center lg:w-[52vw] max-lg:rounded-3xl max-lg:bg-white/70 max-lg:p-6 max-lg:backdrop-blur-md"
+        className="relative z-10 flex flex-col justify-center max-md:w-full lg:w-[52vw] max-lg:rounded-3xl max-lg:p-6"
       >
         <motion.p
           variants={rise}
@@ -148,12 +148,23 @@ export default function Contact() {
           <span className="w-10 h-px bg-gray-200"></span>
           <button
             type="button"
-            // bubbles up to the scroller, which glides back to the start
-            onClick={(e) =>
-              e.currentTarget.dispatchEvent(
-                new CustomEvent("scrollfade:to", { detail: 0, bubbles: true }),
-              )
-            }
+            onClick={(e) => {
+              const btn = e.currentTarget;
+              if (window.matchMedia("(max-width: 767px)").matches) {
+                // mobile: the scroller is vertical, so glide back to the top
+                btn
+                  .closest<HTMLElement>("[data-scroller]")
+                  ?.scrollTo({ top: 0, behavior: "smooth" });
+              } else {
+                // desktop: bubbles up to the scroller, which glides back to the start
+                btn.dispatchEvent(
+                  new CustomEvent("scrollfade:to", {
+                    detail: 0,
+                    bubbles: true,
+                  }),
+                );
+              }
+            }}
             className={pillBtn}
           >
             <BiRotateLeft size={16} />

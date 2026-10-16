@@ -3,7 +3,10 @@ import Roll from "@/components/ui/Roll";
 
 const UNIT = 10; // px between ruler ticks
 
-type Sec = { name: string; left: number };
+// below the md breakpoint the page scrolls vertically; from md up it scrolls sideways
+const isVertical = () => window.matchMedia("(max-width: 767px)").matches;
+
+type Sec = { name: string; left: number }; // `left` = start edge along the active scroll axis
 type SecState = { idx: number; total: number; name: string; dir: number };
 
 export default function BottomBar({
@@ -28,12 +31,14 @@ export default function BottomBar({
     /* ---- sections: any element inside the scroller with data-section="NAME" ---- */
     let secs: Sec[] = [];
     const collect = () => {
-      const base = scroller.getBoundingClientRect().left - scroller.scrollLeft;
+      const v = isVertical();
+      const sr = scroller.getBoundingClientRect();
+      const base = v ? sr.top - scroller.scrollTop : sr.left - scroller.scrollLeft;
       secs = [...scroller.querySelectorAll<HTMLElement>("[data-section]")].map(
-        (el) => ({
-          name: el.dataset.section ?? "",
-          left: el.getBoundingClientRect().left - base,
-        }),
+        (el) => {
+          const r = el.getBoundingClientRect();
+          return { name: el.dataset.section ?? "", left: (v ? r.top : r.left) - base };
+        },
       );
     };
 
@@ -56,8 +61,14 @@ export default function BottomBar({
     let raf = 0;
     const draw = () => {
       raf = requestAnimationFrame(draw);
-      const sl = scroller.scrollLeft;
-      const max = Math.max(0, scroller.scrollWidth - scroller.clientWidth);
+      const v = isVertical();
+      const sl = v ? scroller.scrollTop : scroller.scrollLeft;
+      const max = Math.max(
+        0,
+        v
+          ? scroller.scrollHeight - scroller.clientHeight
+          : scroller.scrollWidth - scroller.clientWidth,
+      );
 
       /* percent: state only changes when the rounded number does */
       const p = max > 0 ? Math.round((sl / max) * 100) : 0;
@@ -67,10 +78,10 @@ export default function BottomBar({
         setPct({ v: p, dir });
       }
 
-      /* active section = last one whose left edge has passed the viewport centre */
+      /* active section = last one whose start edge has passed the viewport centre */
       let idx = -1;
       if (secs.length) {
-        const center = sl + scroller.clientWidth / 2;
+        const center = sl + (v ? scroller.clientHeight : scroller.clientWidth) / 2;
         idx = 0;
         secs.forEach((s, i) => {
           if (s.left <= center) idx = i;
@@ -170,11 +181,11 @@ export default function BottomBar({
       <canvas
         ref={canvasRef}
         aria-hidden="true"
-        className="block min-w-16 flex-1"
+        className="hidden min-w-16 flex-1 sm:block"
       />
 
       {/* SCROLL 000% — each digit rolls on its own; the % is primary */}
-      <span className="hidden items-center whitespace-nowrap sm:flex">
+      <span className="ml-auto flex items-center whitespace-nowrap">
         SCROLL&nbsp;
         {digits.map((d, i) => (
           <Roll key={i} value={d} dir={pct.dir} />

@@ -4,7 +4,29 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" />
     <title>Loading...</title>
+
+    <!-- Kulim Park lives here rather than in a CSS @import: an @import makes the
+         browser discover the font only after the stylesheet lands, which stalls the
+         first paint behind a third-party round trip. Loaded non-render-blocking, so a
+         slow or unreachable Google Fonts can't hold the first paint hostage either. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Kulim+Park:wght@400;500&display=swap"
+      onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Kulim+Park:wght@400;500&display=swap"
+      />
+    </noscript>
+
+    <link rel="preload" href="/fonts/Gendy.woff" as="font" type="font/woff" crossorigin />
   </head>
   <body>
     <div id="root"></div>

@@ -2,6 +2,15 @@ import { useEffect, useRef, useState, type RefObject } from "react";
 import { NavLink } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
+  BiEnvelope,
+  BiHome,
+  BiLayer,
+  BiMenu,
+  BiMessageSquareDetail,
+  BiUser,
+  BiX,
+} from "react-icons/bi";
+import {
   activeSpring,
   bottomLabelVariants,
   easeOutExpo,
@@ -14,11 +23,11 @@ import Lotus from "./Lotus";
 
 // Each hash maps to an element inside the scroller with id="about" (or data-section="ABOUT", case-insensitive).
 const sections = [
-  { label: "Home", path: "/" },
-  { label: "About", path: "#about" },
-  { label: "Projects", path: "#projects" },
-  { label: "Testimonials", path: "#testimonials" },
-  { label: "Contact", path: "#contact" },
+  { label: "Home", path: "/", Icon: BiHome },
+  { label: "About", path: "#about", Icon: BiUser },
+  { label: "Projects", path: "#projects", Icon: BiLayer },
+  { label: "Testimonials", path: "#testimonials", Icon: BiMessageSquareDetail },
+  { label: "Contact", path: "#contact", Icon: BiEnvelope },
 ];
 
 const tabs = sections;
@@ -30,11 +39,17 @@ const findSection = (scroller: HTMLElement, key: string) =>
     `[id="${key}"], [data-section="${key}" i]`,
   );
 
-// left edge of an element in the scroller's scrollable coordinate space
-const leftOf = (scroller: HTMLElement, el: HTMLElement) =>
-  el.getBoundingClientRect().left -
-  scroller.getBoundingClientRect().left +
-  scroller.scrollLeft;
+// below the md breakpoint the page scrolls vertically; from md up it scrolls sideways
+const isVertical = () => window.matchMedia("(max-width: 767px)").matches;
+
+// start edge of an element (top on mobile, left on desktop) in the scroller's scrollable coordinate space
+const startOf = (scroller: HTMLElement, el: HTMLElement) => {
+  const s = scroller.getBoundingClientRect();
+  const r = el.getBoundingClientRect();
+  return isVertical()
+    ? r.top - s.top + scroller.scrollTop
+    : r.left - s.left + scroller.scrollLeft;
+};
 
 // Header: only width and opacity. Width opens from the right edge (the header is anchored right).
 const navVariants = {
@@ -59,8 +74,10 @@ export default function Header({
 }) {
   const [activePath, setActivePath] = useState("/");
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
   // while a tab-click glide is running, ignore scroll-driven updates so the indicator doesn't hop through every tab
-  const lock = useRef<{ left: number; until: number } | null>(null);
+  const lock = useRef<{ pos: number; until: number } | null>(null);
 
   /* ---- active tab follows the section in view ---- */
   useEffect(() => {
@@ -68,27 +85,32 @@ export default function Header({
     if (!scroller) return;
 
     const update = () => {
-      const sl = scroller.scrollLeft;
+      const v = isVertical();
+      const sl = v ? scroller.scrollTop : scroller.scrollLeft;
 
       if (lock.current) {
         if (
           performance.now() < lock.current.until &&
-          Math.abs(sl - lock.current.left) > 2
+          Math.abs(sl - lock.current.pos) > 2
         )
           return;
         lock.current = null;
       }
 
-      const max = scroller.scrollWidth - scroller.clientWidth;
+      const max = v
+        ? scroller.scrollHeight - scroller.clientHeight
+        : scroller.scrollWidth - scroller.clientWidth;
+      const size = v ? scroller.clientWidth : scroller.clientWidth;
+
       let next = "/";
       if (max > 2 && sl >= max - 2) {
-        next = tabs[tabs.length - 1].path; // the last section is often too narrow to reach the centre
+        next = tabs[tabs.length - 1].path; // the last section is often too short/narrow to reach the centre
       } else {
-        const center = sl + scroller.clientWidth / 2;
+        const center = sl + size / 2;
         for (const t of tabs) {
           if (t.path === "/") continue;
           const el = findSection(scroller, keyOf(t.path));
-          if (el && leftOf(scroller, el) <= center) next = t.path;
+          if (el && startOf(scroller, el) <= center) next = t.path;
         }
       }
       setActivePath(next);
@@ -108,40 +130,120 @@ export default function Header({
     };
   }, [scrollerRef]);
 
+  /* ---- mobile menu: close on outside tap or Escape ---- */
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const onPointerDown = (e: PointerEvent) => {
+      if (!menuRef.current?.contains(e.target as Node)) setMenuOpen(false);
+    };
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [menuOpen]);
+
   /* ---- tab click -> glide to the section ---- */
   const goTo = (path: string) => {
     const scroller = scrollerRef.current;
     if (!scroller) return;
+    const v = isVertical();
 
-    let left = 0;
+    let pos = 0;
     if (path !== "/") {
       const el = findSection(scroller, keyOf(path));
       if (!el) return;
       // line the section up with the scroller's inner padding edge
-      left =
-        leftOf(scroller, el) -
-        (parseFloat(getComputedStyle(scroller).paddingLeft) || 0);
+      const cs = getComputedStyle(scroller);
+      pos =
+        startOf(scroller, el) -
+        (parseFloat(v ? cs.paddingTop : cs.paddingLeft) || 0);
     }
-    left = Math.max(0, left);
+    pos = Math.max(0, pos);
 
-    lock.current = { left, until: performance.now() + 1500 };
+    lock.current = { pos, until: performance.now() + 1500 };
     setActivePath(path);
-    scroller.dispatchEvent(new CustomEvent("scrollfade:to", { detail: left }));
+
+    if (v) {
+      // mobile: native smooth scroll down the column
+      scroller.scrollTo({ top: pos, behavior: "smooth" });
+    } else {
+      // desktop: the ScrollFade glide
+      scroller.dispatchEvent(new CustomEvent("scrollfade:to", { detail: pos }));
+    }
   };
 
   const isTabActive = (path: string) => path === activePath;
 
   return (
-    <header className="flex justify-between items-center z-50">
+    <header className="relative z-50 flex items-center justify-between">
       <div className="flex-center w-16">
         <Lotus size="h-8 w-5" />
       </div>
 
+      {/* mobile: burger + dropdown */}
+      <div ref={menuRef} className="relative md:hidden">
+        <button
+          type="button"
+          onClick={() => setMenuOpen((open) => !open)}
+          aria-expanded={menuOpen}
+          aria-controls="mobile-menu"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          className="grid size-11 place-items-center rounded-full bg-white/50 text-black ring-1 ring-gray-100 transition-colors hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+        >
+          {menuOpen ? <BiX size={26} /> : <BiMenu size={24} />}
+        </button>
+
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.nav
+              id="mobile-menu"
+              aria-label="Main navigation"
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
+              className="absolute right-0 top-full mt-2 w-56 rounded-3xl bg-white/90 p-2 shadow-xl shadow-black/10 ring-1 ring-gray-100"
+            >
+              {tabs.map(({ label, path, Icon }) => {
+                const isActive = isTabActive(path);
+                return (
+                  <NavLink
+                    key={path}
+                    to={path}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      goTo(path);
+                      setMenuOpen(false);
+                    }}
+                    className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
+                      isActive
+                        ? "bg-primary text-white"
+                        : "text-black active:bg-gray-100"
+                    }`}
+                  >
+                    <Icon size={18} aria-hidden="true" />
+                    {label}
+                  </NavLink>
+                );
+              })}
+            </motion.nav>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* desktop: the pill nav */}
       <motion.nav
         variants={navVariants}
         initial="hidden"
         animate="visible"
-        className="flex items-center gap-1 overflow-hidden whitespace-nowrap rounded-full ring-1 ring-gray-100 bg-white/50 p-1"
+        className="hidden items-center gap-1 overflow-hidden whitespace-nowrap rounded-full bg-white/50 p-1 ring-1 ring-gray-100 md:flex"
         aria-label="Main navigation"
       >
         {tabs.map((tab, index) => {

@@ -1,7 +1,8 @@
-import { useEffect, useState, type ComponentType, type RefObject } from "react";
+import { useCallback, useEffect, useRef, type ComponentType } from "react";
 import {
   motion,
   useMotionValue,
+  useMotionValueEvent,
   useTransform,
   type MotionValue,
 } from "framer-motion";
@@ -13,6 +14,7 @@ import {
   BiRocket,
   BiUserCircle,
 } from "react-icons/bi";
+import type { ScrollEngine, ScrollState } from "@/lib/scrollEngine";
 
 type IconConfig = {
   section: string; // matches the data-section of the section it belongs to
@@ -60,98 +62,110 @@ const FAR = 1e5; // "not measured yet / section not on this page": keeps the ico
 
 function SectionIcon({
   config,
-  scrollerRef,
+  engine,
   scrollLeft,
+  vw,
 }: {
   config: IconConfig;
-  scrollerRef: RefObject<HTMLDivElement | null>;
+  engine: ScrollEngine;
   scrollLeft: MotionValue<number>;
+  vw: MotionValue<number>;
 }) {
   const { section, Icon, rx, ry, k, size, at = 0 } = config;
 
   // the scrollLeft at which this icon sits at rest (its section lined up, or the chosen spot along a long one)
   const anchor = useMotionValue(FAR);
 
-  useEffect(() => {
-    const scroller = scrollerRef.current;
-    if (!scroller) return;
+  // right -> left, k times faster than the page: it arrives with its section and leaves with it
+  const x = useTransform(
+    [scrollLeft, anchor, vw],
+    ([sl, a, w]: number[]) => w * rx + k * (a - sl),
+  );
+  const opacity = useTransform(
+    [scrollLeft, anchor, vw],
+    ([sl, a, w]: number[]) =>
+      Math.max(0, 1 - Math.abs(a - sl) / (w * 0.85)) ** 1.5,
+  );
+  const rotate = useTransform(
+    [scrollLeft, anchor, vw],
+    ([sl, a, w]: number[]) => ((a - sl) / w) * 20,
+  );
 
-    const measure = () => {
+  // Anchor once per invalidation (resize, a section mounting, an image loading) — never
+  // on a scroll frame.
+  const measure = useCallback(
+    ({ vertical }: ScrollState, origin: DOMRect) => {
+      const scroller = engine.element;
+      // mobile: the icons are display:none anyway, so don't measure for them at all
+      if (!scroller || vertical) return anchor.set(FAR);
       const el = scroller.querySelector<HTMLElement>(
         `[data-section="${section}"]`,
       );
       if (!el) return anchor.set(FAR);
       const r = el.getBoundingClientRect();
-      const left =
-        r.left - scroller.getBoundingClientRect().left + scroller.scrollLeft;
+      const left = r.left - origin.left + scroller.scrollLeft;
       const pad = parseFloat(getComputedStyle(scroller).paddingLeft) || 0;
       anchor.set(left - pad + at * Math.max(0, r.width - scroller.clientWidth));
-    };
-
-    measure();
-    const mo = new MutationObserver(measure); // sections mounting later
-    mo.observe(scroller, { childList: true, subtree: true });
-    const ro = new ResizeObserver(measure);
-    ro.observe(scroller);
-    if (scroller.firstElementChild) ro.observe(scroller.firstElementChild);
-
-    return () => {
-      mo.disconnect();
-      ro.disconnect();
-    };
-  }, [scrollerRef, section, at, anchor]);
-
-  // right -> left, k times faster than the page: it arrives with its section and leaves with it
-  const x = useTransform(
-    [scrollLeft, anchor],
-    ([sl, a]: number[]) => window.innerWidth * rx + k * (a - sl),
+    },
+    [engine, section, at, anchor],
   );
-  const opacity = useTransform(
-    [scrollLeft, anchor],
-    ([sl, a]: number[]) =>
-      Math.max(0, 1 - Math.abs(a - sl) / (window.innerWidth * 0.85)) ** 1.5,
+
+  useEffect(() => engine.onInvalidate(measure), [engine, measure]);
+
+  // A blurred element still costs a raster even at opacity 0. Off screen, skip it entirely.
+  const blur = useRef<HTMLSpanElement>(null);
+  const hidden = useRef(false);
+
+  const setBlur = useCallback(
+    (node: HTMLSpanElement | null) => {
+      blur.current = node;
+      if (!node) return;
+      hidden.current = opacity.get() < 0.01;
+      node.style.visibility = hidden.current ? "hidden" : "visible";
+    },
+    [opacity],
   );
-  const rotate = useTransform(
-    [scrollLeft, anchor],
-    ([sl, a]: number[]) => ((a - sl) / window.innerWidth) * 20,
-  );
+
+  useMotionValueEvent(opacity, "change", (v) => {
+    const node = blur.current;
+    const hide = v < 0.01;
+    if (!node || hide === hidden.current) return;
+    hidden.current = hide;
+    node.style.visibility = hide ? "hidden" : "visible";
+  });
 
   return (
     <motion.div
       aria-hidden="true"
-      style={{
-        x,
-        opacity,
-        rotate,
-        top: `${ry}%`,
-        filter: `blur(${(k - 1) * 3}px)`,
-      }}
-      className="pointer-events-none -z-10 fixed left-0 text-primary/25 will-change-transform"
+      style={{ x, opacity, rotate, top: `${ry}%` }}
+      className="hidden md:block pointer-events-none -z-10 fixed left-0 text-primary/25 will-change-transform"
     >
-      <Icon size={`${size}vh`} />
+      {/* The blur sits on a static inner layer: it rasterises once, and the outer
+          transform then only re-composites that cached texture. */}
+      <span
+        ref={setBlur}
+        className="block"
+        style={{ filter: `blur(${(k - 1) * 3}px)` }}
+      >
+        <Icon size={`${size}vh`} />
+      </span>
     </motion.div>
   );
 }
 
-export default function SectionIcons({
-  scrollerRef,
-}: {
-  scrollerRef: RefObject<HTMLDivElement | null>;
-}) {
+export default function SectionIcons({ engine }: { engine: ScrollEngine }) {
   const scrollLeft = useMotionValue(0);
-  const [ready, setReady] = useState(false);
+  const vw = useMotionValue(window.innerWidth);
 
-  useEffect(() => {
-    const el = scrollerRef.current;
-    if (!el) return;
-    const update = () => scrollLeft.set(el.scrollLeft);
-    update();
-    el.addEventListener("scroll", update, { passive: true });
-    setReady(true);
-    return () => el.removeEventListener("scroll", update);
-  }, [scrollerRef, scrollLeft]);
-
-  if (!ready) return null; // the scroller ref exists after the first commit
+  useEffect(
+    () =>
+      engine.onTick(({ left, vw: width, vertical }) => {
+        if (vertical) return; // the icons only exist from md up
+        scrollLeft.set(left);
+        vw.set(width);
+      }),
+    [engine, scrollLeft, vw],
+  );
 
   return (
     <>
@@ -159,8 +173,9 @@ export default function SectionIcons({
         <SectionIcon
           key={`${c.section}-${c.at ?? 0}`}
           config={c}
-          scrollerRef={scrollerRef}
+          engine={engine}
           scrollLeft={scrollLeft}
+          vw={vw}
         />
       ))}
     </>

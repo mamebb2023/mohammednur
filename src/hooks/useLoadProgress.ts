@@ -1,76 +1,72 @@
 import { useEffect, useState } from "react";
-import {
-  animate,
-  useMotionValue,
-  useReducedMotion,
-  useTransform,
-} from "framer-motion";
-import { easeInOutQuart } from "@/constants";
+import { useReducedMotion } from "framer-motion";
 import { getPreloadTasks } from "@/lib/preload";
 
-const MAX_WAIT_MS = 5000; // never hold the loader longer than this
-const HOLD_MS = 1000; // pause on 100% before lifting
+const COUNT_MS = 1400; // the designed count-up
+const TICK_MS = 60;
+const HOLD_MS = 900; // brief beat on 100% before the curtain lifts
+const DEADLINE_MS = 3200; // nothing can hold the curtain longer than this
 
 export function useLoadProgress() {
   const reduceMotion = useReducedMotion();
-  const [ready, setReady] = useState(false);
-
-  // timed: the designed count-up. real: fraction of assets ready.
-  // The label shows whichever is behind, so it never over-claims.
-  const timed = useMotionValue(0);
-  const real = useMotionValue(0);
-  const label = useTransform(
-    [timed, real],
-    ([t, r]: number[]) => `${Math.min(t, r).toFixed(1)}%`,
-  );
+  const [value, setValue] = useState(0); // whole number, 0-100
+  const [loaded, setLoaded] = useState(false); // reached 100: the page can mount behind the curtain
+  const [ready, setReady] = useState(false); // curtain can lift
 
   useEffect(() => {
     let cancelled = false;
-    let maxTimeout: ReturnType<typeof setTimeout>;
-    let holdTimeout: ReturnType<typeof setTimeout>;
+    let finished = false;
+    let hold: ReturnType<typeof setTimeout> | undefined;
 
-    const countUp = animate(timed, 100, {
-      duration: reduceMotion ? 1 : 2,
-      ease: easeInOutQuart,
-    });
+    const duration = reduceMotion ? COUNT_MS / 3 : COUNT_MS;
+    const startedAt = performance.now();
 
-    const tasks = getPreloadTasks();
+    // a broken or missing preload list must never keep the page from loading
+    let tasks: PromiseLike<unknown>[] = [];
+    try {
+      tasks = Array.from(getPreloadTasks() as Iterable<PromiseLike<unknown>>);
+    } catch {
+      tasks = [];
+    }
+
+    let real = tasks.length ? 0 : 100;
     let settled = 0;
     tasks.forEach((task) =>
-      task.then(() => {
-        if (cancelled) return;
-        settled += 1;
-        animate(real, (settled / tasks.length) * 100, {
-          duration: 0.35,
-          ease: "easeOut",
-        });
-      }),
+      Promise.resolve(task)
+        .catch(() => undefined)
+        .then(() => {
+          settled += 1;
+          real = (settled / tasks.length) * 100;
+        }),
     );
 
-    const assetsDone = Promise.race([
-      Promise.all(tasks),
-      new Promise<void>((resolve) => {
-        maxTimeout = setTimeout(() => {
-          animate(real, 500, { duration: 0.7, ease: "easeOut" });
-          resolve();
-        }, MAX_WAIT_MS);
-      }),
-    ]);
+    const finish = () => {
+      if (cancelled || finished) return;
+      finished = true;
+      clearInterval(timer);
+      clearTimeout(deadline);
+      setValue(100);
+      setLoaded(true);
+      hold = setTimeout(() => !cancelled && setReady(true), HOLD_MS);
+    };
 
-    // countUp is thenable, so it works directly in Promise.all
-    Promise.all([countUp, assetsDone]).then(() => {
-      if (cancelled) return;
-      holdTimeout = setTimeout(() => setReady(true), HOLD_MS);
-    });
+    // Wall-clock timers only, no animation frames: a throttled tab can't freeze the number.
+    // The number shows whichever is behind (the count-up or the real loading), so it never over-claims.
+    const timer = setInterval(() => {
+      const t = Math.min(100, ((performance.now() - startedAt) / duration) * 100);
+      setValue(Math.floor(Math.min(t, real)));
+      if (t >= 100 && real >= 100) finish();
+    }, TICK_MS);
+
+    const deadline = setTimeout(finish, DEADLINE_MS);
 
     return () => {
       cancelled = true;
-      countUp.stop();
-      real.stop();
-      clearTimeout(maxTimeout);
-      clearTimeout(holdTimeout);
+      clearInterval(timer);
+      clearTimeout(deadline);
+      clearTimeout(hold);
     };
-  }, [timed, real, reduceMotion]);
+  }, [reduceMotion]);
 
-  return { label, ready };
+  return { value, loaded, ready };
 }

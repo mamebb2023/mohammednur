@@ -1,28 +1,24 @@
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion, useMotionValueEvent } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { easeInOutQuart } from "@/constants";
 import { useLoadProgress } from "@/hooks/useLoadProgress";
 
-const CONTENT_DELAY_MS = 1000;
-
-const toPercent = (label: string) =>
-  Math.min(100, Math.max(0, Math.floor(parseFloat(label) || 0)));
+const EXIT_S = 0.5; // how long the curtain takes to fade
+const MOUNT_AT_MS = 400; // the page mounts just before the curtain is gone, so its entrance is seen
 
 export default function InitialLoader({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { label, ready } = useLoadProgress();
-  const [value, setValue] = useState(() => toPercent(label.get()));
+  const { value, ready } = useLoadProgress();
   const [showContent, setShowContent] = useState(false);
 
-  useMotionValueEvent(label, "change", (l) => setValue(toPercent(l)));
-
+  // A timer, not an animation callback: a paused rAF must never keep the page unmounted.
   useEffect(() => {
     if (!ready) return;
-    const timeout = setTimeout(() => setShowContent(true), CONTENT_DELAY_MS);
-    return () => clearTimeout(timeout);
+    const timer = setTimeout(() => setShowContent(true), MOUNT_AT_MS);
+    return () => clearTimeout(timer);
   }, [ready]);
 
   return (
@@ -36,7 +32,7 @@ export default function InitialLoader({
             initial={false}
             exit={{
               opacity: 0,
-              transition: { duration: 0.9, ease: easeInOutQuart },
+              transition: { duration: EXIT_S, ease: easeInOutQuart },
             }}
             className="fixed inset-0 z-100 overflow-hidden bg-white"
             role="status"
