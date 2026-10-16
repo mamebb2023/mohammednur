@@ -45,7 +45,7 @@ export default function Hero() {
           variants={rise}
           className="mb-[1.2svh] font-gendy text-[clamp(22px,5.5vw,30px)] italic leading-[1.15] text-gray-500 md:text-[clamp(30px,3.6vw,64px)]"
         >
-          Hi, I am<span className="text-primary">,</span>
+          Hi. I am<span className="text-primary">,</span>
         </motion.p>
 
         <motion.h1
