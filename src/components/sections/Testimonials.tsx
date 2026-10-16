@@ -14,7 +14,7 @@ const testimonials = [
   },
   {
     quote:
-      "Mohammednur built the backend for our grid bot on Jupiter. The structure is clean, the code is easy to follow, and he explained every decision along the way. Solid engineering from start to finish.",
+      "Mohammednur built the backend for our grid bot using Jupiter. The structure is clean, the code is easy to follow, and he explained every decision along the way. Solid engineering from start to finish.",
     name: "VALGRID",
     role: "JUPITER GRID BOT",
   },
@@ -94,7 +94,9 @@ export default function Testimonials() {
         >
           <motion.div
             variants={rise}
-            style={{ "--off": layout[i % layout.length].offset } as CSSProperties}
+            style={
+              { "--off": layout[i % layout.length].offset } as CSSProperties
+            }
             className="relative md:top-(--off)"
           >
             <BiSolidQuoteAltLeft size={26} className="mb-6 text-primary" />
