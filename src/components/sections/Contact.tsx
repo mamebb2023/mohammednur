@@ -94,7 +94,7 @@ export default function Contact() {
         >
           Let's build something
           <br />
-          <span className="text-transparent tracking-wide [-webkit-text-stroke:2px_#03fc7f]">
+          <span className="text-transparent tracking-wide [-webkit-text-stroke:2px_var(--color-primary)]">
             worth shipping.
           </span>
         </motion.h2>

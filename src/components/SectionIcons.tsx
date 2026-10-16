@@ -51,7 +51,7 @@ const ICONS: IconConfig[] = [
   {
     section: "CONTACT",
     Icon: BiPaperPlane,
-    rx: 0.04,
+    rx: 0.45,
     ry: 22,
     k: 1.6,
     size: 26,
