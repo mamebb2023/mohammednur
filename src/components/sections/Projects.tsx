@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { BiLinkExternal, BiLogoGithub, BiPlus } from "react-icons/bi";
+import { BiLinkExternal, BiLogoGithub, BiRightArrowAlt } from "react-icons/bi";
 import { projects, rise, staggerContainer } from "@/constants";
 import { Link } from "react-router";
 
@@ -11,11 +11,13 @@ const tint = (color: string, pct: number) =>
 
 /* The grayscale gets its own, much shorter duration: a filter cross-fade repaints the
    whole image on every frame, while the scale is a transform that just gets composited.
-   Written as a shorthand because Tailwind's transition-[...] can't carry two durations. */
+   Written as a shorthand because Tailwind's transition-[...] can't carry two durations.
+   Tailwind v4 emits scale-* as the standalone `scale` property, so it is named below. */
 const figureImg =
   "block size-full scale-[1.03] object-cover md:grayscale md:group-hover/fig:scale-[1.06] md:group-hover/fig:grayscale-0";
 const figureImgTransition = {
-  transition: "filter 300ms ease-out, transform 700ms ease-out",
+  transition:
+    "filter 300ms ease-out, transform 700ms ease-out, scale 700ms ease-out",
 };
 
 const btn =
@@ -198,20 +200,41 @@ export default function Projects() {
         );
       })}
 
+      {/* end cap — picks up the outlined-numeral treatment and the pill language of the section */}
       <motion.div
         variants={staggerContainer}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
-        className="flex-center"
+        className="group/end relative z-10 flex w-full shrink-0 items-center justify-center border-t border-gray-100 px-6 py-16 md:h-full md:w-[calc(100vw-40px)] md:border-t-0 md:border-l md:py-0 lg:w-[50vw] lg:pl-[4vw] lg:pr-0"
       >
-        <Link
-          to="/projects"
-          className="p-4 bg-white/10 rounded-3xl flex-center gap-2 text-primary font-mono font-medium tracking-[0.2em] hover:bg-white/20 transition text-center"
+        <motion.div
+          variants={rise}
+          className="flex flex-col items-center gap-[clamp(16px,3svh,30px)] text-center"
         >
-          <BiPlus size={16} />
-          More Projects
-        </Link>
+          <span
+            aria-hidden="true"
+            className="font-gendy text-[clamp(64px,6.5vw,124px)] italic font-semibold leading-[0.8] text-transparent transition-[-webkit-text-stroke-color] duration-300 [-webkit-text-stroke:1.5px_rgba(3,252,127,0.45)] group-hover/end:[-webkit-text-stroke-color:rgba(3,252,127,0.9)]"
+          >
+            +
+          </span>
+
+          <p className="font-mono text-[10px] font-medium leading-[2.1] tracking-[0.22em] text-gray-500 sm:text-[11px]">
+            {pad(projects.length)} FEATURED BUILDS
+            <br />
+            <span className="text-gray-400">
+              THERE'S MORE WHERE THAT CAME FROM
+            </span>
+          </p>
+
+          <Link
+            to="/projects"
+            className="inline-flex items-center gap-2 rounded-full border border-primary/45 bg-white/60 px-6 py-3.5 font-mono text-[11px] font-medium tracking-[0.18em] text-gray-800 shadow-sm transition hover:border-primary hover:bg-primary hover:text-black hover:shadow-lg hover:shadow-primary/25"
+          >
+            MORE PROJECTS
+            <BiRightArrowAlt size={16} />
+          </Link>
+        </motion.div>
       </motion.div>
     </section>
   );

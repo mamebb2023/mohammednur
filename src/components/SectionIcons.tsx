@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, type ComponentType } from "react";
+import { useCallback, useEffect, useRef, useState, type ComponentType } from "react";
 import {
   motion,
   useMotionValue,
@@ -157,6 +157,18 @@ export default function SectionIcons({ engine }: { engine: ScrollEngine }) {
   const scrollLeft = useMotionValue(0);
   const vw = useMotionValue(window.innerWidth);
 
+  // Pages without sections (e.g. /projects) have nothing for the icons to belong to,
+  // so they are not rendered there at all — no blurred layers in the tree.
+  const [hasSections, setHasSections] = useState(false);
+
+  useEffect(
+    () =>
+      engine.onInvalidate(() => {
+        setHasSections(!!engine.element?.querySelector("[data-section]"));
+      }),
+    [engine],
+  );
+
   useEffect(
     () =>
       engine.onTick(({ left, vw: width, vertical }) => {
@@ -166,6 +178,8 @@ export default function SectionIcons({ engine }: { engine: ScrollEngine }) {
       }),
     [engine, scrollLeft, vw],
   );
+
+  if (!hasSections) return null;
 
   return (
     <>

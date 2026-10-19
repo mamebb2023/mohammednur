@@ -30,7 +30,7 @@ const SOCIALS = [
 ];
 
 const iconBtn =
-  "grid size-[54px] shrink-0 cursor-pointer place-items-center rounded-full border border-gray-200 bg-white/60 text-gray-600 transition hover:border-primary hover:text-black hover:shadow-lg";
+  "grid size-[54px] shrink-0 cursor-pointer place-items-center rounded-full border border-gray-200 bg-white/60 text-gray-600 transition hover:border-primary hover:text-black hover:shadow-lg max-md:size-12";
 
 const pillBtn =
   "inline-flex cursor-pointer items-center gap-2 rounded-full border border-primary/45 bg-white/60 px-4 py-2.5 font-mono text-[11px] font-medium tracking-[0.16em] text-gray-800 transition hover:border-primary hover:bg-primary hover:text-black hover:shadow-lg";
@@ -55,7 +55,7 @@ export default function Contact() {
     <section
       id="contact"
       data-section="CONTACT"
-      className="relative flex w-full items-center justify-end pl-6 pr-6 max-md:min-h-[80svh] max-md:justify-center max-md:py-10 md:w-screen md:pl-[6vw] md:pr-[3vw]"
+      className="relative flex w-full items-center justify-end pl-6 pr-6 max-md:min-h-[70svh] max-md:justify-center max-md:py-10 md:w-screen md:pl-[6vw] md:pr-[3vw]"
     >
       {/* giant faint section number */}
       <motion.span
@@ -63,7 +63,7 @@ export default function Contact() {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 1.2, ease: "easeInOut", delay: 0.5 }}
         aria-hidden="true"
-        className="pointer-events-none absolute bottom-2 left-[1.5vw] select-none font-gendy text-[18svh] italic font-semibold leading-[0.8] text-primary/10 md:text-[26vh]"
+        className="pointer-events-none absolute bottom-2 left-[1.5vw] select-none font-gendy text-[18svh] italic font-semibold leading-[0.8] text-primary/10 max-md:left-auto max-md:right-4 max-md:text-[13svh] md:text-[26vh]"
       >
         05
       </motion.span>
@@ -78,11 +78,11 @@ export default function Contact() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.3 }}
-        className="relative z-10 flex flex-col justify-center max-md:w-full lg:w-[52vw] max-lg:rounded-3xl max-lg:p-6"
+        className="relative z-10 flex flex-col justify-center max-md:w-full lg:w-[52vw] max-lg:rounded-3xl md:max-lg:p-6"
       >
         <motion.p
           variants={rise}
-          className="flex flex-wrap items-center justify-end gap-2 font-mono text-[11px] font-medium tracking-[0.3em] text-gray-500"
+          className="flex flex-wrap items-center justify-end gap-2 font-mono text-[11px] font-medium tracking-[0.3em] text-gray-500 max-md:justify-start max-md:gap-x-1.5 max-md:gap-y-1 max-md:text-[10px] max-md:tracking-[0.22em]"
         >
           <b className="font-medium text-primary">05</b> · CONTACT — SAY HI ·
           <span className="inline-block size-1.75 animate-pulse rounded-full bg-primary" />
@@ -91,7 +91,7 @@ export default function Contact() {
 
         <motion.h2
           variants={rise}
-          className="mb-[5vh] mt-[3vh] text-right font-gendy text-[clamp(34px,4.2vw,76px)] font-semibold leading-[1.08]"
+          className="mb-[5vh] mt-[3vh] text-right font-gendy text-[clamp(34px,4.2vw,76px)] font-semibold leading-[1.08] max-md:mb-6 max-md:mt-4 max-md:text-left"
         >
           Let's build something
           <br />
@@ -102,11 +102,11 @@ export default function Contact() {
 
         <motion.div
           variants={rise}
-          className="flex flex-wrap items-center justify-end gap-4.5"
+          className="flex flex-wrap items-center justify-end gap-4.5 max-md:justify-start max-md:gap-3"
         >
           <a
             href={`mailto:${EMAIL}`}
-            className="break-all border-b-2 border-primary/40 pb-2 font-gendy text-[clamp(22px,2.4vw,42px)] font-semibold leading-[1.2] transition-colors duration-300 hover:border-primary hover:text-primary"
+            className="break-all border-b-2 border-primary/40 pb-2 font-gendy text-[clamp(22px,2.4vw,42px)] font-semibold leading-[1.2] transition-colors duration-300 hover:border-primary hover:text-primary max-md:text-[clamp(17px,4.9vw,21px)]"
           >
             {EMAIL}
           </a>
@@ -122,7 +122,7 @@ export default function Contact() {
 
         <motion.div
           variants={rise}
-          className="mt-[5.5vh] flex justify-end gap-3"
+          className="mt-[5.5vh] flex justify-end gap-3 max-md:mt-6 max-md:justify-start max-md:gap-2.5"
         >
           {SOCIALS.map(({ label, href, Icon }) => (
             <motion.a
@@ -141,12 +141,12 @@ export default function Contact() {
 
         <motion.div
           variants={rise}
-          className="mt-[7vh] flex flex-wrap items-center justify-end gap-6.5 font-mono text-[10px] tracking-[0.18em] text-gray-500"
+          className="mt-[7vh] flex flex-wrap items-center justify-end gap-6.5 font-mono text-[10px] tracking-[0.18em] text-gray-500 max-md:mt-8 max-md:justify-start max-md:gap-x-3 max-md:gap-y-2"
         >
           <span>© {new Date().getFullYear()} MOHAMMEDNUR</span>
-          <span className="w-10 h-px bg-gray-200"></span>
+          <span className="w-10 h-px bg-gray-200 max-md:hidden"></span>
           <span>BUILT WITH ❤️ BY ME</span>
-          <span className="w-10 h-px bg-gray-200"></span>
+          <span className="w-10 h-px bg-gray-200 max-md:hidden"></span>
           <button
             type="button"
             onClick={(e) => {
