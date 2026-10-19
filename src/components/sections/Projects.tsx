@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-import { BiLinkExternal, BiLogoGithub } from "react-icons/bi";
+import { BiLinkExternal, BiLogoGithub, BiPlus } from "react-icons/bi";
 import { projects, rise, staggerContainer } from "@/constants";
+import { Link } from "react-router";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
@@ -23,6 +24,7 @@ const btn =
 export default function Projects() {
   return (
     <section
+      id="projects"
       data-section="PROJECTS"
       className="relative flex items-stretch max-md:w-full max-md:flex-col md:w-max"
     >
@@ -195,6 +197,22 @@ export default function Projects() {
           </motion.article>
         );
       })}
+
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        className="flex-center"
+      >
+        <Link
+          to="/projects"
+          className="p-4 bg-white/10 rounded-3xl flex-center gap-2 text-primary font-mono font-medium tracking-[0.2em] hover:bg-white/20 transition text-center"
+        >
+          <BiPlus size={16} />
+          More Projects
+        </Link>
+      </motion.div>
     </section>
   );
 }

@@ -80,6 +80,20 @@ export default function ScrollFade({
       if (e.ctrlKey) return; // let pinch-zoom through
       const max = engine.state.maxX;
       if (max <= 0) return;
+      // A panel that scrolls vertically on its own (data-scroll-y, e.g. the projects
+      // gallery) keeps the wheel while it can still move; at its edges the event
+      // falls through to the horizontal glide.
+      const panel = (e.target as Element | null)?.closest<HTMLElement>(
+        "[data-scroll-y]",
+      );
+      if (
+        panel &&
+        Math.abs(e.deltaY) > Math.abs(e.deltaX) &&
+        (e.deltaY > 0
+          ? panel.scrollTop + panel.clientHeight < panel.scrollHeight - 1
+          : panel.scrollTop > 1)
+      )
+        return;
       sync();
       let d = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
       if (e.deltaMode === 1) d *= 18;

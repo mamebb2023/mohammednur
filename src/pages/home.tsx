@@ -1,4 +1,4 @@
-import { usePageTitle } from "@/hooks/usePageTitle";
+import { useSeo } from "@/hooks/useSeo";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
 import Projects from "@/components/sections/Projects";
@@ -6,7 +6,10 @@ import Testimonials from "@/components/sections/Testimonials";
 import Contact from "@/components/sections/Contact";
 
 export default function Home() {
-  usePageTitle("Mohammednur | Software Engineer");
+  useSeo({
+    title: "Mohammednur Seid — Full-Stack React & Next.js Developer",
+    path: "/",
+  });
 
   // mobile: a full-width column of sections; md and up: a horizontal strip
   return (

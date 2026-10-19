@@ -7,6 +7,7 @@ import BottomBar from "@/components/BottomBar";
 import Lotus from "@/components/Lotus";
 import SectionIcons from "@/components/SectionIcons";
 import { useScrollEngine } from "@/lib/scrollEngine";
+import { glideToSection } from "@/lib/sectionNav";
 
 // Where the lotus's centre ends up at the end of the scroll, as a fraction of the viewport width.
 const LOTUS_END_CENTER = 0.15;
@@ -18,12 +19,25 @@ const lotusStartCenter = (vw: number) =>
 const MainLayout = () => {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const engine = useScrollEngine();
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
 
-  // each page starts at the top-left (mobile scrolls vertically, desktop horizontally)
+  // each page starts at the top-left (mobile scrolls vertically, desktop horizontally);
+  // a "#section" in the URL (e.g. arriving from /projects) glides there instead
   useEffect(() => {
-    scrollerRef.current?.scrollTo({ left: 0, top: 0 });
-  }, [pathname]);
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+    if (!hash) {
+      scroller.scrollTo({ left: 0, top: 0 });
+      return;
+    }
+    // one frame, so the new route's sections are laid out before they're measured
+    const raf = requestAnimationFrame(() => {
+      if (!glideToSection(scroller, hash.slice(1))) {
+        scroller.scrollTo({ left: 0, top: 0 });
+      }
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [pathname, hash]);
 
   // 0 -> 1 across the horizontal scroll, read from the shared snapshot so late-loading
   // content can't throw it off

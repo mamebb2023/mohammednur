@@ -3,26 +3,109 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/lotus.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#ffffff" />
-    <title>Loading...</title>
+
+    <!-- The tags crawlers and link-preview scrapers read before JS runs.
+         useSeo keeps title/description/canonical/og in sync per route after mount. -->
+    <title>Mohammednur Seid — Full-Stack React & Next.js Developer</title>
+    <meta
+      name="description"
+      content="Portfolio of Mohammednur Seid, a full-stack engineer in Addis Ababa building React & Next.js web apps — from AI tools like LotusFlow to a bilingual clinic site."
+    />
+    <meta name="author" content="Mohammednur Seid" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://monur.pro.et/" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Mohammednur" />
+    <meta
+      property="og:title"
+      content="Mohammednur Seid — Full-Stack React & Next.js Developer"
+    />
+    <meta
+      property="og:description"
+      content="Portfolio of Mohammednur Seid, a full-stack engineer in Addis Ababa building React & Next.js web apps — from AI tools like LotusFlow to a bilingual clinic site."
+    />
+    <meta property="og:url" content="https://monur.pro.et/" />
+    <meta property="og:image" content="https://monur.pro.et/og.png" />
+    <meta property="og:image:width" content="1365" />
+    <meta property="og:image:height" content="767" />
+    <meta
+      property="og:image:alt"
+      content="Mohammednur — full-stack software engineer portfolio"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Mohammednur Seid — Full-Stack React & Next.js Developer"
+    />
+    <meta
+      name="twitter:description"
+      content="Portfolio of Mohammednur Seid, a full-stack engineer in Addis Ababa building React & Next.js web apps — from AI tools like LotusFlow to a bilingual clinic site."
+    />
+    <meta name="twitter:image" content="https://monur.pro.et/og.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://monur.pro.et/#person",
+            "name": "Mohammednur Seid",
+            "jobTitle": "Full-Stack Software Engineer",
+            "url": "https://monur.pro.et/",
+            "email": "mailto:mamebb2023@gmail.com",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Addis Ababa",
+              "addressCountry": "ET"
+            },
+            "knowsAbout": [
+              "React",
+              "Next.js",
+              "TypeScript",
+              "Node.js",
+              "Prisma"
+            ],
+            "sameAs": [
+              "https://github.com/mamebb2023",
+              "https://linkedin.com/in/mohammednur-seid",
+              "https://x.com/thatsolodev"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://monur.pro.et/#website",
+            "url": "https://monur.pro.et/",
+            "name": "Mohammednur — Portfolio",
+            "publisher": { "@id": "https://monur.pro.et/#person" },
+            "inLanguage": "en"
+          }
+        ]
+      }
+    </script>
 
     <!-- Kulim Park lives here rather than in a CSS @import: an @import makes the
          browser discover the font only after the stylesheet lands, which stalls the
          first paint behind a third-party round trip. Loaded non-render-blocking, so a
-         slow or unreachable Google Fonts can't hold the first paint hostage either. -->
+         slow or unreachable Google Fonts can't hold the first paint hostage either.
+         The extra families are only used by the /projects/* hero explorations;
+         browsers fetch those files only when such a page renders text that needs them. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Kulim+Park:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Engagement&family=Inter:wght@300;400;500;600&family=Kulim+Park:wght@400;500&family=Montserrat:wght@200;300;400;500&family=Playfair+Display:wght@300;400;500;600&display=swap"
       onload="this.onload=null;this.rel='stylesheet'"
     />
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Kulim+Park:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Engagement&family=Inter:wght@300;400;500;600&family=Kulim+Park:wght@400;500&family=Montserrat:wght@200;300;400;500&family=Playfair+Display:wght@300;400;500;600&display=swap"
       />
     </noscript>
 

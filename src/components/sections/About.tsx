@@ -30,6 +30,7 @@ const ledger = [
 export default function About() {
   return (
     <section
+      id="about"
       data-section="ABOUT"
       className="relative flex shrink-0 py-10 pl-6 pr-6 md:min-w-screen md:py-3 md:pl-[6vw] md:pr-[4vw] md:max-lg:overflow-x-hidden md:max-lg:overflow-y-auto md:max-lg:overscroll-y-contain"
     >

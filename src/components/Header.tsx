@@ -1,5 +1,11 @@
-import { useEffect, useRef, useState, type RefObject } from "react";
-import { NavLink } from "react-router-dom";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type MouseEvent,
+  type RefObject,
+} from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   BiEnvelope,
@@ -19,37 +25,29 @@ import {
   stackVariants,
   topLabelVariants,
 } from "@/constants";
+import {
+  findSection,
+  isVertical,
+  keyOf,
+  sectionPos,
+  startOf,
+} from "@/lib/sectionNav";
 import Lotus from "./Lotus";
 
 // Each hash maps to an element inside the scroller with id="about" (or data-section="ABOUT", case-insensitive).
 const sections = [
   { label: "Home", path: "/", Icon: BiHome },
-  { label: "About", path: "#about", Icon: BiUser },
-  { label: "Projects", path: "#projects", Icon: BiLayer },
-  { label: "Testimonials", path: "#testimonials", Icon: BiMessageSquareDetail },
-  { label: "Contact", path: "#contact", Icon: BiEnvelope },
+  { label: "About", path: "/#about", Icon: BiUser },
+  { label: "Projects", path: "/#projects", Icon: BiLayer },
+  {
+    label: "Testimonials",
+    path: "/#testimonials",
+    Icon: BiMessageSquareDetail,
+  },
+  { label: "Contact", path: "/#contact", Icon: BiEnvelope },
 ];
 
 const tabs = sections;
-
-const keyOf = (path: string) => path.replace(/^[/#]/, "");
-
-const findSection = (scroller: HTMLElement, key: string) =>
-  scroller.querySelector<HTMLElement>(
-    `[id="${key}"], [data-section="${key}" i]`,
-  );
-
-// below the md breakpoint the page scrolls vertically; from md up it scrolls sideways
-const isVertical = () => window.matchMedia("(max-width: 767px)").matches;
-
-// start edge of an element (top on mobile, left on desktop) in the scroller's scrollable coordinate space
-const startOf = (scroller: HTMLElement, el: HTMLElement) => {
-  const s = scroller.getBoundingClientRect();
-  const r = el.getBoundingClientRect();
-  return isVertical()
-    ? r.top - s.top + scroller.scrollTop
-    : r.left - s.left + scroller.scrollLeft;
-};
 
 // Header: only width and opacity. Width opens from the right edge (the header is anchored right).
 const navVariants = {
@@ -76,6 +74,7 @@ export default function Header({
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { pathname } = useLocation();
   // while a tab-click glide is running, ignore scroll-driven updates so the indicator doesn't hop through every tab
   const lock = useRef<{ pos: number; until: number } | null>(null);
 
@@ -149,7 +148,8 @@ export default function Header({
     };
   }, [menuOpen]);
 
-  /* ---- tab click -> glide to the section ---- */
+  /* ---- tab click: glide when the section is on this page, otherwise let the
+     router navigate to "/#section" and MainLayout glides once it mounts ---- */
   const goTo = (path: string) => {
     const scroller = scrollerRef.current;
     if (!scroller) return;
@@ -159,13 +159,8 @@ export default function Header({
     if (path !== "/") {
       const el = findSection(scroller, keyOf(path));
       if (!el) return;
-      // line the section up with the scroller's inner padding edge
-      const cs = getComputedStyle(scroller);
-      pos =
-        startOf(scroller, el) -
-        (parseFloat(v ? cs.paddingTop : cs.paddingLeft) || 0);
+      pos = sectionPos(scroller, el);
     }
-    pos = Math.max(0, pos);
 
     lock.current = { pos, until: performance.now() + 1500 };
     setActivePath(path);
@@ -177,6 +172,13 @@ export default function Header({
       // desktop: the ScrollFade glide
       scroller.dispatchEvent(new CustomEvent("scrollfade:to", { detail: pos }));
     }
+  };
+
+  const onHome = pathname === "/";
+  const onTabClick = (e: MouseEvent, path: string) => {
+    if (!onHome) return; // not on home: the NavLink changes route, the hash effect glides
+    e.preventDefault();
+    goTo(path);
   };
 
   const isTabActive = (path: string) => path === activePath;
@@ -218,8 +220,7 @@ export default function Header({
                     key={path}
                     to={path}
                     onClick={(e) => {
-                      e.preventDefault();
-                      goTo(path);
+                      onTabClick(e, path);
                       setMenuOpen(false);
                     }}
                     className={`flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
@@ -287,10 +288,7 @@ export default function Header({
 
               <NavLink
                 to={tab.path}
-                onClick={(e) => {
-                  e.preventDefault();
-                  goTo(tab.path);
-                }}
+                onClick={(e) => onTabClick(e, tab.path)}
                 className={`relative z-10 flex items-center rounded-full px-4 py-2 text-sm font-medium transition-[color,background-color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
                   isActive ? "text-white" : "text-black"
                 }`}

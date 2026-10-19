@@ -53,6 +53,7 @@ export default function Contact() {
 
   return (
     <section
+      id="contact"
       data-section="CONTACT"
       className="relative flex w-full items-center justify-end pl-6 pr-6 max-md:min-h-[80svh] max-md:justify-center max-md:py-10 md:w-screen md:pl-[6vw] md:pr-[3vw]"
     >

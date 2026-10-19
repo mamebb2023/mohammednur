@@ -36,6 +36,7 @@ const layout = [
 export default function Testimonials() {
   return (
     <section
+      id="testimonials"
       data-section="TESTIMONIALS"
       className="relative flex items-stretch max-md:w-full max-md:flex-col md:w-max"
     >

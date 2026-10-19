@@ -28,7 +28,7 @@ type IconConfig = {
 
 // The icons that go with each section. Contact's content sits on the right, so its icon sits on the left.
 const ICONS: IconConfig[] = [
-  { section: "HOME", Icon: BiCodeAlt, rx: 0.72, ry: 12, k: 1.5, size: 24 },
+  { section: "HOME", Icon: BiCodeAlt, rx: 0.5, ry: 12, k: 1.5, size: 24 },
   { section: "ABOUT", Icon: BiUserCircle, rx: 0.78, ry: 50, k: 1.3, size: 28 },
   { section: "PROJECTS", Icon: BiLayer, rx: 0.68, ry: 8, k: 1.6, size: 22 },
   {
