@@ -8,6 +8,7 @@ import {
   BiRotateLeft,
 } from "react-icons/bi";
 import { FaXTwitter } from "react-icons/fa6";
+import { SiUpwork } from "react-icons/si";
 import { rise, staggerContainer } from "@/constants";
 
 const EMAIL = "mamebb2023@gmail.com";
@@ -26,6 +27,11 @@ const SOCIALS = [
     label: "X",
     href: "https://x.com/thatsolodev",
     Icon: FaXTwitter,
+  },
+  {
+    label: "Upwork",
+    href: "https://upwork.com/freelancers/~01e488d551441650a7",
+    Icon: SiUpwork,
   },
 ];
 
